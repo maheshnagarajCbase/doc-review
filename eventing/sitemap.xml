@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-couchbase-lite.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-elasticsearch-connector.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-home.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-kafka-connector.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-server.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-spark-connector.xml</loc>
+</sitemap>
+<sitemap>
+<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-sync-gateway.xml</loc>
+</sitemap>
+</sitemapindex>
