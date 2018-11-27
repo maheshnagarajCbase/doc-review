@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-couchbase-lite.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-couchbase-lite.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-elasticsearch-connector.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-elasticsearch-connector.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-home.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-home.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-kafka-connector.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-kafka-connector.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-server.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-server.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-spark-connector.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-spark-connector.xml</loc>
 </sitemap>
 <sitemap>
-<loc>https://github.com/maheshnagarajCbase/github.io/TESTING/sitemap-sync-gateway.xml</loc>
+<loc>https:maheshnagarajCbase.github.io/DOC-2700/sitemap-sync-gateway.xml</loc>
 </sitemap>
 </sitemapindex>
