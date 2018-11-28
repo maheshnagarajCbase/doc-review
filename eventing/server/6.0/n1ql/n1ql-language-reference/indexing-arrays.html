@@ -101,7 +101,7 @@
 </nav>
 <div class="tools" role="navigation">
   <ul>
-    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/ALICE_GA_12NOV/docs-server/modules/n1ql/pages/n1ql-language-reference/indexing-arrays.adoc" title="Edit this Page">Edit</a></li>
+    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/n1ql/pages/n1ql-language-reference/indexing-arrays.adoc" title="Edit this Page">Edit</a></li>
   </ul>
 </div>
   </div>
@@ -254,7 +254,7 @@ Couchbase 4.6.2 release introduces the following enhancements to array indexing:
 <p>Allow arbitrary variable names in array index selection.
 That is, a SELECT query or DML that needs to use the array index can use different variable names in the query from those used in the array index definition.
 In earlier releases, the variable names must exactly match.
-See <a href="https://developer.couchbase.com/documentation/server/4.5/n1ql/n1ql-language-reference/indexing-arrays.html" target="_blank" rel="noopener">4.5 documentation</a> for details.</p>
+See the <a href="#">4.5@n1ql-language-reference/indexing-arrays.adoc</a> for details.</p>
 </li>
 <li>
 <p>Support <code class="var">simple_array_expr</code>, which provides simpler syntax for array indexing when all array elements are indexed as is, without requiring to use the ARRAY operator in the index definition.</p>
@@ -390,7 +390,7 @@ WHERE type = "airline";</pre>
 <h2 id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The following samples use the <a href="https://developer.couchbase.com/documentation/server/4.6/sdk/sample-application.html" target="_blank" rel="noopener">travel-sample</a> keyspace that is shipped with the product.</p>
+<p>The following examples use the <a href="../../manage/manage-settings/install-sample-buckets.html" class="page">travel-sample</a> keyspace that is shipped with the product.</p>
 </div>
 <div class="paragraph">
 <p><strong>Example 1</strong>: Indexing all DISTINCT elements in an array</p>
@@ -2640,25 +2640,22 @@ Result:
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="../../eventing/eventing-Terminologies.html">Terminology</a>
+    <a class="nav-link" href="../../eventing/eventing-functions.html">Couchbase Functions</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="../../eventing/eventing-language-constructs.html">Language Constructs</a>
+    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
     </span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="3">
-    <span class="nav-line">
-    <a class="nav-link" href="../../eventing/eventing-timers.html">Timers</a>
-    </span>
-  </li>
-</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="../../eventing/eventing-adding-function.html">Adding a Couchbase Function</a>
+    <a class="nav-link" href="../../eventing/eventing-adopting-eventing-service.html">Adopting the Eventing Service in your Organization</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="../../eventing/eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
@@ -2667,6 +2664,11 @@ Result:
     <a class="nav-link" href="../../eventing/eventing-examples.html">Examples: Using the Eventing Service</a>
     </span>
 <ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="../../eventing/eventing-example-creating-buckets.html">Creating Buckets</a>
+    </span>
+  </li>
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="../../eventing/eventing-example-data-enrichment.html">Data Enrichment</a>
@@ -2688,16 +2690,6 @@ Result:
     </span>
   </li>
 </ul>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <span class="nav-line">
-    <a class="nav-link" href="../../eventing/eventing-debugging-and-diagnosability.html">Debugging and Diagnosability</a>
-    </span>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <span class="nav-line">
-    <a class="nav-link" href="../../eventing/eventing-statistics.html">Statistics</a>
-    </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">

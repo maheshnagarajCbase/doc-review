@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eventing Service: Fundamentals_27Nov | Couchbase Docs (Local)</title>
+    <title>Eventing Service: Fundamentals | Couchbase Docs (Local)</title>
     <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-overview.html">
     <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
     <meta name="dcterms.subject" content="server">
@@ -100,12 +100,12 @@
 </nav>
 <div class="tools" role="navigation">
   <ul>
-    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/ALICE_GA_12NOV/docs-server/modules/eventing/pages/eventing-overview.adoc" title="Edit this Page">Edit</a></li>
+    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/eventing/pages/eventing-overview.adoc" title="Edit this Page">Edit</a></li>
   </ul>
 </div>
   </div>
 <article class="doc">
-<h1 class="page">Eventing Service: Fundamentals_27Nov</h1>
+<h1 class="page">Eventing Service: Fundamentals</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="quoteblock abstract">
@@ -172,334 +172,170 @@ Each of these data mutations qualifies as an event in the cluster.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><strong>Why use the Eventing Service?</strong></p>
-</div>
-<div class="paragraph">
-<p>The Eventing Service helps you to streamline your business workflows.
-Using the Couchbase Eventing Service you can:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Manage a data-driven business logic across business-critical applications in a timely manner, thereby increasing your customer engagement.</p>
-</li>
-<li>
-<p>Handle inconsistencies in business logic while working with multiple client applications across domains.</p>
-</li>
-<li>
-<p>Design newer data products by leveraging lower technical barriers in the Eventing Service.</p>
-</li>
-<li>
-<p>Develop a reliable infrastructure that can execute your business logic in a rapidly changing data platform.</p>
-</li>
-<li>
-<p>Scale your throughput without making changes to your data configuration and infrastructure.</p>
-</li>
-<li>
-<p>Maximize your return on investment by minimising your TCO.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Eventing Service versus Message Queue and Polling Implementations</strong></p>
-</div>
-<div class="paragraph">
-<p>The following table compares the implementation of the Eventing Service with the message queue method that is used to solve the tracking of data mutations.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 38.1679%;">
-<col style="width: 61.8321%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Message Queue or Bus Implementation</th>
-<th class="tableblock halign-left valign-top">Eventing Service Implementation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Needs an additional layer to propagate data changes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Inherent to Couchbase Server and does not need a new layer to propagate data changes.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Encounters dual-write problems.
-Every write operation gets pushed twice; once to the message queue and the second time to the cluster.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Eliminates the dual-write problem.
-Multiple application servers can perform simultaneous write operations.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">At any point, a write-failure condition can happen.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Eliminates the write-failure condition; no transaction semantics.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No easy debug option during troubleshooting.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Integrated with native debugger support.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Leads to inefficient data governance and data leakages.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Provides a centralized control for aspects such as data auditing and data governance, thereby reduces data leakages.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">With the added license, infrastructure, and deployment expenses, the Total Cost of Ownership (TCO) increases many folds.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No additional expenses, the TCO is reduced.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>The following table compares the implementation of the Eventing Service with the polling method that is used to solve the tracking of data mutations.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 38.1679%;">
-<col style="width: 61.8321%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Polling Implementation</th>
-<th class="tableblock halign-left valign-top">Eventing Service Implementation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To record and propagate data changes, multiple applications are needed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Can record and propagate data changes to a database, message queue, an end-point, or to another bucket inside the Couchbase cluster.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Batch systems are highly inefficient and are not reactive.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Handles data mutations in real-time.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Consumes a lot of CPU resources.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Implements as a state-less compute operation and utilizes latest trends in compute (multi-core CPU).</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Leads to code duplications across multiple infrastructure applications.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">No code duplication.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Difficult to scale.
-You need to scale for applications and also scale for transport layer requirements.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Provides easy horizontal scaling options.</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 </div>
 <div class="sect1">
-<h2 id="eventing-functions"><a class="anchor" href="#eventing-functions"></a><strong>Couchbase Functions</strong></h2>
+<h2 id="terminologies"><a class="anchor" href="#terminologies"></a>Terminologies</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Functions, also referred to as Functions, offers a computing paradigm that developers can use to handle data changes.
-In the Couchbase cluster, you can use the Functions to handle data-changes according to an Event-Condition-Action model.</p>
+<p>We recommend that you begin by reading the following Eventing Service related terminologies, and refer to them as you need them.</p>
 </div>
 <div class="paragraph">
-<p>For Application developers, the Functions offers a platform using which you can focus on building the business logic, than over configuration or infrastructure.
-Functions handle the event that is generated when a document is created, updated, or deleted.
-The serverless computing infrastructure gets closer to the datastore as the Couchbase Functions integrates with the Couchbase Data Platform.</p>
+<p><strong>Data Mutations</strong>
+Create, update, expiry, or delete operations on a document are termed as data mutations.</p>
 </div>
 <div class="paragraph">
-<p><strong>Features of Functions</strong></p>
+<p><strong>Event</strong>
+In the Couchbase Server context, a single data mutation is consider to be an event.</p>
 </div>
 <div class="paragraph">
-<p>You can configure Functions to generate threshold-based alerts.
-If your business logic requires you to monitor specific parameters inside a document, then you can use Functions to trigger an alert upon a threshold breach.</p>
+<p><strong>Couchbase Functions</strong>
+Couchbase Functions, also referred to as Functions, offers a computing paradigm to handle data mutations. Functions handle data mutations according to an Event-Condition-Action model.</p>
 </div>
 <div class="paragraph">
-<p>Apart from notifications and alerts, Functions provides an option to propagate data changes.
-You can propagate data changes and move documents to a different bucket inside your Couchbase cluster.
-Since Couchbase is a NoSQL document-oriented data platform, Functions provides an easy option to perform cascade deletes.</p>
+<p><strong>Stateless</strong>
+In the serverless computing space, stateless can be defined as a set of conditions at a particular moment in time.</p>
 </div>
 <div class="paragraph">
-<p><strong>Benefits of Functions</strong></p>
+<p>The document under consideration along with its extended attributes and the metadata bucket entities are considered to be in a persistent state (non-stateless, get it clarified).</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>Improves customer experience and engagement</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Data enrichment: Before the introduction of the Eventing Service, data enrichment was accomplished through batch jobs.
-These batch jobs were not in real-time and often resulted in increasing the cost of infrastructure and management.
-Using the Eventing Service, the data enrichment capability was achievable in real-time.
-Functions involve moderate coding effort, time to market and restart capabilities can be achieved easily.</p>
-</li>
-<li>
-<p>Simple to use: Since Functions are developed within the Eventing Service framework, tracking data changes in your cluster is manageable.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>In the Eventing Service framework, all other entities in the Eventing Service framework that are present on the  execution stack are considered to be in an ephemeral state.</p>
 </div>
-</li>
-<li>
-<p>Faster innovation</p>
-<div class="ulist">
-<ul>
-<li>
-<p>With a focus on business logic, development cycles are reduced.
-The Eventing Service platform offers a developer-friendly environment which in turn aids the faster creation of Minimum-Viable-Products(MVPs).</p>
-</li>
-<li>
-<p>Using Functions, Application Developers can rapidly remodel their business workflows and thereby stay in-sync with any business change conditions.</p>
-</li>
-<li>
-<p>Functions offer a lower barrier to technology-adoption by emphasizing on business operations.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p><strong>Function Handler Code</strong>
+Handler is a short-running code-fragment which gets triggered as a response to a specific event. A collection of handlers constitute a Function.</p>
 </div>
-</li>
-<li>
-<p>Reducing infrastructure and operations-cost</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Since the implementation of the Eventing Service is intrinsic to the Couchbase cluster, it offers a simple to deploy working model.</p>
-</li>
-<li>
-<p>The Eventing Service provides optimum utilization of resources and controls essential aspects such as data auditing, data governance, and node scaling.</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Function handler code are stateless entities that are executed from start to finish. Couchbase Server, currently supports OnUpdate and OnDelete handlers.</p>
 </div>
-</li>
-</ul>
+<div class="paragraph">
+<p>Couchbase Server supports multiple OnUpdate and OnDelete handlers. You can have more one than one handlers in a particular Function definition.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source Bucket</strong>
+Couchbase Functions listens to data mutations from a specific bucket. This bucket is termed as source bucket. The source bucket can be either Couchbase or Ephemeral bucket type. However, memcached bucket types are not supported.
+When you are creating a Function, you need to specify a source bucket. The handler code polls this bucket to track data mutations.</p>
+</div>
+<div class="paragraph">
+<p>You can use a common source bucket to listen to multiple Functions running different code.</p>
+</div>
+<div class="paragraph">
+<p>When a source bucket is deleted, all deployed functions associated with this source bucket, are undeployed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Metadata Bucket</strong>
+Couchbase Functions uses a bucket to store artifacts such as timers, DCP streams, worker allocations along with other internal checkpoint information. This bucket is termed as the metadata bucket.</p>
+</div>
+<div class="paragraph">
+<p>When you are creating a Function, ensure that a separate bucket is destined as a
+metadata bucket. You can use a common metadata bucket across multiple Functions.</p>
+</div>
+<div class="paragraph">
+<p>At any point in time, refrain from deleting the metadata bucket. Also, ensure that the Function handler code does not perform a write operation on the metadata bucket.</p>
+</div>
+<div class="paragraph">
+<p>If a metadata bucket gets accidentally deleted, then all deployed functions are undeployed and associated indexes get dropped.</p>
+</div>
+<div class="paragraph">
+<p><strong>Timer</strong>
+Timers are asynchronous compute which offers Function execution in reference to wall-clock events. Timers also measure and track the amount of elapsed time.</p>
+</div>
+<div class="paragraph">
+<p><strong>Bindings</strong>
+A binding allows separating of environment specific variables from the handler code.</p>
+</div>
+<div class="paragraph">
+<p>Bindings can be of various types. In the current implementation, we have bindings of the type Alias. You can create an alias with a name value pair; bucket name as a name and value as a variable are paired. In the handler code you can reference the bucket name by using the variable.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Bindings are mandatory when your handler code performs any bucket related operations.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Bindings ensure easy porting of source code across different environments. You can export-import Functions from test-to-test, test-to-production, or production-to-production environments, without making code changes</p>
+</div>
+<div class="paragraph">
+<p><strong>Workers</strong>
+Workers are execution units that are assigned a group of vBuckets. Worker units are used during the Function execution step to process the events.</p>
+</div>
+<div class="paragraph">
+<p>You can allocate workers to scale-up or scale-down the Function execution, This way, you can effectively leverage all the {CPU}cores available on the cluster.</p>
+</div>
+<div class="paragraph">
+<p><strong>Deploy</strong>
+The deploy operation activates a Function. Functions must be in a deployed status to process events. Couchbase Server performs a source validation step before  Function deployment.</p>
+</div>
+<div class="paragraph">
+<p><strong>Undeploy</strong>
+An undeploy operation terminates processing of events. Allocated workers, of the undeployed Function, get terminated. Additionally, other runtime resources acquired by the Function are released. To edit the handler code, you must undeploy a Function.</p>
+</div>
+<div class="paragraph">
+<p><strong>Delete</strong>
+A delete operations removes the Function from the cluster. When a Function is deleted, the source code implementing the Function, all processing checkpoints, and other artifacts in the metadata provider are purged. To delete a Function, you must undeployed the Function.</p>
+</div>
+<div class="paragraph">
+<p><strong>Feed Boundary</strong>
+The feed boundary attribute is used as a time milestone during the Function definition process. Using this time milestone, you can choose to invoke a Function on all data mutations available in the cluster or on future instances of data mutation, post Function deployment.</p>
+</div>
+<div class="paragraph">
+<p><strong>Function Script Timeout</strong>
+Function Script Timeout is a time attribute which indicates when to terminate a non-responsive Function.</p>
+</div>
+<div class="paragraph">
+<p><strong>Visual Debugger</strong>
+Visual Debugger, also termed as debugger, is a tool that is used to debug a data mutation.
+When you’re running into issues, the debugger is available in Couchbase Server. Using this tool, you can set breakpoints and step through it using a Chrome browser.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Rebalance</strong>
+Eventing Rebalancing is the process of redistributing Eventing workload across nodes.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Failover</strong>
+Failing over an Eventing node means that Couchbase Server removes the Eventing node from a cluster and makes replicated data at other nodes available for client requests.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Statistics</strong>
+The Eventing Service provides statistical information such as number of processed Functions, handler failures, Function backlogs, along with instances of Function timeouts. These statistical inputs help you arrive at informed decisions.</p>
+</div>
+<div class="paragraph">
+<p><strong>Transpiler</strong>
+A transpiler accepts source code provided as input from one high-level programming language and produces an equivalent code in another high-level programming language.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source Map</strong>
+Source map provides a mapping between the transpiled code and the original function handler code. Source maps are used during debugging.
+Infinite Function Recursions
+Function handlers can in turn trigger data mutations. Destination buckets having other Function handlers configured to track data mutations triggers an infinite Function recursions scenario. As an Application Developer, you need to avoid this cyclic generation while using a series of handlers.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="eventing-use-cases"><a class="anchor" href="#eventing-use-cases"></a><strong>Use Cases</strong></h2>
+<h2 id="current-implementation-of-eventing-service"><a class="anchor" href="#current-implementation-of-eventing-service"></a>Current Implementation of Eventing Service</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As an Organization, you can use the Eventing Service in a wide variety of use cases.
-Be it in domains such as retail, healthcare, telecommunications, media, or travel; you can leverage the Eventing Service to track data mutations.</p>
+<p>Currently, Couchbase Server implements the Eventing Service by using Functions. Implementing Feeds in to the Eventing Service framework is an active part of our product roadmap.</p>
 </div>
+<div class="sect2">
+<h3 id="functions"><a class="anchor" href="#functions"></a>Functions</h3>
 <div class="paragraph">
-<p>For an easy understanding, consider a sample use case in the banking and financial domain.
-Let us say the user performs a credit card transaction.
-Using the Event-Condition-Action model, you can design a custom workflow based on factors such as user&#8217;s credit limit, usage currency, and risk propositions.</p>
+<p>Functions are server-side computing paradigms  which handle data mutations according to an Event-Condition-Action model. For more information, refer to {link}</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="feeds"><a class="anchor" href="#feeds"></a>Feeds</h3>
 <div class="paragraph">
-<p>As another sample use case, consider an organization operating in the Supply Chain Management domain.
-As a developer, using the Function&#8217;s Event-Condition-Action model, you can design a custom workflow in your inventory for stock replenishment.
-Functions help you to construct a business workflow that automatically triggers new stock replacements and maintains a set stock threshold.</p>
+<p>Feeds feature is currently work in progress but is planned as part of our product roadmap.</p>
 </div>
-<div class="paragraph">
-<p>The tabular column below lists popular scenarios where the Eventing Service across domains can be used.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Eventing Service - Use Cases</caption>
-<colgroup>
-<col style="width: 21.645%;">
-<col style="width: 35.0649%;">
-<col style="width: 21.645%;">
-<col style="width: 21.6451%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Domain</th>
-<th class="tableblock halign-left valign-top">Eventing Trigger</th>
-<th class="tableblock halign-left valign-top">Condition Check</th>
-<th class="tableblock halign-left valign-top">Sample Workflow</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Banking &amp; Financial Services</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Card transaction</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction threshold</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Generate risk alerts and quarantine user upon threshold breach.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Inventory/</p>
-<p class="tableblock">Warehousing</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New sales voucher</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stock availability</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Generate invoice for stock replenishment.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New purchase order</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Saved wishlist/cart</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Notify price alerts for wishlist items.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Airline</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New booking</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Booking history</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enroll for frequent flyer program and notify special promotions</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enquiry</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">User profile</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Notify price drop alerts</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Healthcare</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New report</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Check for vitals</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Schedule an appointment.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sports/</p>
-<p class="tableblock">Gaming</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">New user creation</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">User profile</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Generate notification about leaderboard and other statistics.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Media/ Entertainment</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Breaking news</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Query archives</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enrich existing news with archival information.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect1">
-<h2 id="eventing-onboarding"><a class="anchor" href="#eventing-onboarding"></a>Eventing Service - Onboarding Information</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In your organization, if you are using the Couchbase data platform, then the Eventing Service is a good fit for managing data mutations.
-The Multi-Dimensional Scaling (MDS) service enables workload isolation and independent scalability in a Couchbase cluster.
-Using the MDS service, the Eventing Service is in line with your real-time data tracking requirements and integrates seamlessly with your existing Couchbase nodes such as the Query, GSI, and FTS nodes.
-Adding a new Eventing node is a simple and repeatable process.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/eventing-service-onboarding-information.jpg" alt="eventing service onboarding information" width="570">
-</div>
-<div class="title">Figure 1. Eventing Service Onboarding Information</div>
-</div>
-<div class="paragraph">
-<p>Following are a few aspects during the onboarding process:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The Eventing Service is intrinsic to Couchbase Server; unlike Polling and Message Queue based external systems, it eliminates the need for an additional layer without involving multiple applications for tracking data mutations.
-All data mutations are handled in real-time, and the Eventing Service offers a centralized control for data governance.</p>
-</li>
-<li>
-<p>When you transition to leverage the Eventing Service, application developers can use Couchbase Functions to manage business workflow changes swiftly.
-Application developers can program, test, debug and troubleshoot on a single Eventing Service platform, instead of managing multiple application across different network layers.</p>
-</li>
-<li>
-<p>After onboarding, you can manage and optimize the system throughput efficiently.
-If your data resides in the Couchbase cluster, based on aspects such as data workload, data mutation rate, and Function execution latency, you can either use the scale out option by adding additional workers or use the elastic scaling option by adding another node.</p>
-</li>
-<li>
-<p>The Eventing Service provides an export and import option for code portability.
-Using this option, you can reuse the Function handler code to validate the execution logic in different environments with workload variations.</p>
-</li>
-<li>
-<p>The Eventing Service is highly performant during the recursive restartability operations.
-You can undeploy a Function, pause for few cycles and then start the Function handler-code.
-Deploying a Function after a time-lapse ensures that the Function execution is tested for restartability.</p>
-</li>
-<li>
-<p>Eventing leverages the latest trends in multi-core CPUs; therefore nodes selected for Eventing should optimally have a higher number of cores than those for indexing.</p>
-</li>
-</ul>
 </div>
 </div>
 </div>
@@ -2130,25 +1966,22 @@ Deploying a Function after a time-lapse ensures that the Function execution is t
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-Terminologies.html">Terminology</a>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <button class="nav-toggle"></button>
-    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
     </span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="3">
-    <span class="nav-line">
-    <a class="nav-link" href="eventing-timers.html">Timers</a>
-    </span>
-  </li>
-</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-adding-function.html">Adding a Couchbase Function</a>
+    <a class="nav-link" href="eventing-adopting-eventing-service.html">Adopting the Eventing Service in your Organization</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
@@ -2157,6 +1990,11 @@ Deploying a Function after a time-lapse ensures that the Function execution is t
     <a class="nav-link" href="eventing-examples.html">Examples: Using the Eventing Service</a>
     </span>
 <ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-example-creating-buckets.html">Creating Buckets</a>
+    </span>
+  </li>
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="eventing-example-data-enrichment.html">Data Enrichment</a>
@@ -2178,16 +2016,6 @@ Deploying a Function after a time-lapse ensures that the Function execution is t
     </span>
   </li>
 </ul>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <span class="nav-line">
-    <a class="nav-link" href="eventing-debugging-and-diagnosability.html">Debugging and Diagnosability</a>
-    </span>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <span class="nav-line">
-    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
-    </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
