@@ -111,40 +111,13 @@
 <h2 id="functions-overview"><a class="anchor" href="#functions-overview"></a>Functions Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Functions, also termed as Functions, are server-side computing paradigms which handle data mutations according to an Event-Condition-Action model.</p>
+<p>Couchbase Functions, also termed as Functions, are server-side computing paradigms which handle data mutations according to an Event-Condition-Action model. Functions offer a platform for developing code, known as Function handler code, as a response to data mutations to the data residing in Couchbase cluster.</p>
 </div>
 <div class="paragraph">
-<p>As a developer, you can use Functions for stateless, seasonal, asynchronous, and low-latency type of workloads. Functions are simple, easy to use, easy to port and can handle scaling complexities without having to change any existing infrastructure and configurations on your data platform. By keeping infrastructure and configuration changes to the minimum, you can move the serverless computing infrastructure closer to the datastore.</p>
+<p>As a developer, you can use Functions for stateless, seasonal, asynchronous, and low-latency type of workloads. Functions are simple, easy to use, easy to port and can handle scaling complexities without having to change any existing infrastructure and configurations on your data platform. By keeping infrastructure and configuration changes to minimum, you can move the serverless computing infrastructure closer to the datastore.</p>
 </div>
 <div class="paragraph">
-<p>Implementation of Functions is native and it seamlessly integrates with the Couchbase Data Platform. Couchbase Functions use the V8 engine for running the Javascript code and offers two handlers, OnUpdate and OnDelete.</p>
-</div>
-<div class="paragraph">
-<p>For a more detailed information on concepts and benefits of Functions, see {link]</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="comparing-functions-with-peer-implementations"><a class="anchor" href="#comparing-functions-with-peer-implementations"></a>Comparing Functions with Peer Implementations</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="functions-and-database-trigger"><a class="anchor" href="#functions-and-database-trigger"></a>Functions and Database Trigger</h3>
-<div class="paragraph">
-<p>Functions respond to actual data mutations, and hence it does not directly correlate with Database Triggers. Unlike
-In Functions, data mutations is complete in the data-layer. After the data mutations step, Function offers an interface for developers to introduce the business workflow in the form of programming logic.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="functions-and-rules-engine"><a class="anchor" href="#functions-and-rules-engine"></a>Functions and Rules Engine</h3>
-<div class="paragraph">
-<p>Functions cannot trigger another Function directly. On the other hand, Rules Engines enforce ordering and other semantics. These capabilities of Rules Engines are not available out-of-the-box with Functions. However, Function in its purest form can be used to implement a rule.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="functions-and-stored-procedure"><a class="anchor" href="#functions-and-stored-procedure"></a>Functions and Stored Procedure</h3>
-<div class="paragraph">
-<p>Stored Procedures is a request-response model. A stored procedure cannot be invoked automatically; it has to be invoked by a calling method. On the contrary, Functions are based on data mutations. These dacan ta mutations trigger Functions, and hence this is not a request-response model.</p>
-</div>
+<p>For a detailed overview, see <a href="eventing-functions-benefits.html" class="page">Features, Benefits and Comparing Functions</a> section.</p>
 </div>
 </div>
 </div>
@@ -152,91 +125,39 @@ In Functions, data mutations is complete in the data-layer. After the data mutat
 <h2 id="language-constructs"><a class="anchor" href="#language-constructs"></a>Language Constructs</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Language constructs are fundamental units of a language. Using Google v8 as the execution container, Couchbase Functions inherit support for most ECMAScript language constructs.</p>
+<p>To support requirement in Couchbase Functions, three new constructs are added and three of the existing JavaScript constructs are removed.</p>
 </div>
 <div class="paragraph">
-<p>Javascript is the language to be used while creating Functions. To support Couchbase Functions requirement, three new constructs are added and three of the existing JavaScript constructs are removed.</p>
-</div>
-<div class="sect2">
-<h3 id="added-constructs"><a class="anchor" href="#added-constructs"></a>Added Constructs</h3>
-<div class="paragraph">
-<p>Following JavaScript features have been added:
-* Bucket Accessors {link}
-* N1QL {link}
-* Timers {link}</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="removed-constructs"><a class="anchor" href="#removed-constructs"></a>Removed Constructs</h3>
-<div class="paragraph">
-<p>Following JavaScript features have been removed:</p>
+<p>Following language constructs have been added.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Global State</p>
+<p><a href="eventing-supportedops.html#bucket-accessors" class="page">Bucket Accessors</a></p>
 </li>
 <li>
-<p>Asynchrony</p>
+<p><a href="eventing-supportedops.html#n1ql" class="page">N1QL</a></p>
 </li>
 <li>
-<p>Browser and other Extensions</p>
+<p><a href="eventing-supportedops.html#timers-lan-con" class="page">Timers</a></p>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="global-state"><a class="anchor" href="#global-state"></a>Global State</h4>
 <div class="paragraph">
-<p>Functions do not allow global variables.</p>
+<p>Following language constructs have been removed.</p>
 </div>
-<div class="paragraph">
-<p>All state must be saved and retrieved from the persistence providers. In the Couchbase Data Platform, the data Service is used as a persistence provider. Data Service bucket(s) stores all the global states information. Functions access the global states using the bindings entity.</p>
-</div>
-<div class="paragraph">
-<p>For the Function-logic to remain agnostic of the rebalance operation, the restriction on usage of global variables is mandatory.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>var count = 0;                         // Not allowed - global variable.
-function OnUpdate(doc, meta)
-{
-  count++;
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="asynchrony"><a class="anchor" href="#asynchrony"></a>Asynchrony</h4>
-<div class="paragraph">
-<p>Access to parent scope is mandatory for Asynchrony, particularly asynchronous callback. Access to parent scope results in a node-specific, long-running state that prevents the capture of entire long-running state in the persistence providers. With this, the Function handlers become short-running, straight-line code, without sleep and wakeups. For this reason the asynchronous callback constructs are not supported.</p>
-</div>
-<div class="paragraph">
-<p>Limited asynchrony is added back through time observers. Time observers can be configured not to make the state node-specific.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta)
-{
-  setTimeout(function(){}, 300);  // Not allowed - asynchronous flow
-}</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="browser-and-other-extensions"><a class="anchor" href="#browser-and-other-extensions"></a>Browser and other Extensions</h4>
-<div class="paragraph">
-<p>A Function executes on Couchbase Server similar to the code that is visible in the browser.
-As a developer, you need to understand that the code displayed in the below example runs in the browser. The ‘window’ term in the code window.XMLHttpRequest(), is not a server-side construct but is in the context of a browser.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta)
-{
-  var rpc = window.XMLHttpRequest();  // Not allowed - browser extension.
-}</pre>
-</div>
-</div>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="eventing-language-constructs.html#globalstate" class="page">Global State</a></p>
+</li>
+<li>
+<p><a href="eventing-language-constructs.html#asynchrony" class="page">Asynchrony</a></p>
+</li>
+<li>
+<p><a href="eventing-language-constructs.html#browser" class="page">Browser and other Extensions</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -244,108 +165,15 @@ As a developer, you need to understand that the code displayed in the below exam
 <h2 id="function-handler-code"><a class="anchor" href="#function-handler-code"></a>Function Handler Code</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Handler code is a short-running code-fragment which gets triggered as a response to a specific event. A collection of handlers constitute a Function.</p>
-</div>
-<div class="paragraph">
-<p>A sample Function handler code is displayed below for reference.</p>
-</div>
-<div class="paragraph">
-<p>&lt;figure&gt;</p>
-</div>
-<div class="sect2">
-<h3 id="supported-event-handlers"><a class="anchor" href="#supported-event-handlers"></a>Supported Event Handlers</h3>
-<div class="paragraph">
-<p>The Eventing Service supports two event-handlers:</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Couchbase Server supports multiple OnUpdate and OnDelete handlers. You can have more one than one handlers in a Function definition.
-</td>
-</tr>
-</table>
-</div>
-<div class="sect3">
-<h4 id="onupdate-handler"><a class="anchor" href="#onupdate-handler"></a>OnUpdate Handler</h4>
-<div class="paragraph">
-<p>The OnUpdate handler gets called when a document is created or modified. The handler listens to data changes from the associated source bucket.</p>
-</div>
-<div class="paragraph">
-<p>A sample OnUpdate handler is displayed below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta)
-{
-  if (doc.type === 'order' &amp;&amp; doc.value &gt; 5000)
-  {
-    //‘phonverify’ is a bucket alias that is specified as a binding.
-    phoneverify[meta.id] = doc.customer;
-  }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Following are a few limitations in the OnUpdate Handler:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Distinguish between a document create and a document update operation is not possible.</p>
-</li>
-<li>
-<p>If a document is modified several times in a short duration, due to deduplication, the handler calls at times, get coalesced into a single event.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="ondelete-handler"><a class="anchor" href="#ondelete-handler"></a>OnDelete Handler</h4>
-<div class="paragraph">
-<p>The OnDelete handler gets called when a document is deleted. The handler listens to data changes from the associated source bucket. This handler also gets invoked during the expiry of a document.</p>
-</div>
-<div class="paragraph">
-<p>A sample OnDelete handler is displayed below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnDelete(meta)
-{
-  var id = meta.id;
-  var stmt = SELECT id from orders WHERE shipaddr = $id;
-    for (var id of stmt)
-    {
-      log("Address invalidated for pending order: " + id);
-    }
-  }</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Following are a few limitations in the OnDelete Handler:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Distinguish between a delete as a result of expiration or from a user-triggered delete operation is not possible.</p>
-</li>
-<li>
-<p>For deleted or expired documents, value of the document cannot be retrieved.</p>
-</li>
-</ul>
-</div>
-</div>
+<p>Handler code is a short-running code-fragment that reacts to an event. For more information refer to the <a href="eventing-function-handler-code.html" class="page">Function Handler Code</a> section.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="supported-operations-inside-a-function-handler-code"><a class="anchor" href="#supported-operations-inside-a-function-handler-code"></a>Supported Operations Inside a Function Handler Code</h2>
+<h2 id="supported-operations"><a class="anchor" href="#supported-operations"></a>Supported Operations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Following operations are supported inside a Function handler code:</p>
+<p>Following operations are supported inside a Function handler code.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -356,315 +184,31 @@ Couchbase Server supports multiple OnUpdate and OnDelete handlers. You can have 
 <p>N1QL Queries</p>
 </li>
 <li>
+<p>Timers</p>
+</li>
+<li>
 <p>REST APIs</p>
 </li>
 </ul>
 </div>
-<div class="sect3">
-<h4 id="bucket-operations"><a class="anchor" href="#bucket-operations"></a>Bucket Operations</h4>
 <div class="paragraph">
-<p>Using the bucket accessors construct, you can read documents from a specific bucket and also perform write operations to other buckets.</p>
-</div>
-<div class="sect4">
-<h5 id="language-construct-for-bucket-accessors"><a class="anchor" href="#language-construct-for-bucket-accessors"></a>Language Construct for Bucket Accessors</h5>
-<div class="paragraph">
-<p>Bucket Accessors is one among the three added language constructs.
-Couchbase Buckets that are associated with a Function appears as a global JavaScript map. All map operations such as get, set, and delete are mapped to their respective get, set and delete operations in the Data Service provider.</p>
-</div>
-<div class="paragraph">
-<p>Dest is the binding, function creation
-Delete is the keyword to delete a document</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta) {
-  // Assuming 'dest' is a bucket alias binding
-  var val = dest[meta.id];         // this is a bucket GET operation.
-  dest[meta.id] = {"status":3};    // this is a bucket SET operation.
-  delete dest[meta.id];            // this is a bucket DEL operation.
-}</pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="n1ql-query"><a class="anchor" href="#n1ql-query"></a>N1QL Query</h4>
-<div class="paragraph">
-<p>Top level N1QL keywords, such as SELECT, UPDATE, and INSERT, are available as keywords in Functions.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-Support for N1QL queries is still in development and may have some rough edges and bugs, and may change significantly before the final GA release. This version is intended for development purposes only, do not use them in production; no Enterprise Support is provided for Developer Preview features..
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="language-construct-for-n1ql-queries"><a class="anchor" href="#language-construct-for-n1ql-queries"></a>Language Construct for N1QL Queries</h4>
-<div class="paragraph">
-<p>N1QL query is the second among the three added language constructs.</p>
-</div>
-<div class="paragraph">
-<p>Operations that return values are accessible through a special iterator on which the for (var &lt;row&gt; of &lt;iterator&gt;) looping-construct has been defined. This restricted looping-construct allows support of query-result streaming, and automatic query-cancellation when the iterator goes out of scope.</p>
-</div>
-<div class="paragraph">
-<p>Any variable that is reachable from the scope of the N1QL query can be referred to using $&lt;variable&gt; syntax in the N1QL statement, where parameters get substituted according to the rules of the named-parameter substitution in the N1QL grammar specification.</p>
-</div>
-<div class="paragraph">
-<p>The iterator is an input iterator (elements are read-only). The keyword this cannot be used in the body of the iterator. The variables created inside the iterator are local to the iterator.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta) {
-  var strong = 70;
-  var stmt =
-    SELECT *                  // N1QL queries are embedded directly.
-    FROM `beer-samples`       // Token escaping is standard N1QL style.
-    WHERE abv &gt; $strong;      // Local variable reference using $ syntax.
-  for (var beer of stmt) {  // Stream results using 'for' iterator.
-    break;                   // Cancel streaming query by breaking out.
-  }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>During deployment, if a handler code includes an N1QL query, then the system generates a warning message. Warning Message: "Handler &lt;function_name&gt; uses Beta features. Do not use in production environments."However, the warning message does not prevent the Function deployment.</p>
-</div>
-<div class="paragraph">
-<p>You must use $&lt;variable&gt;, as per N1QL specification, to use a JavaScript variable in the query statement. The object expressions for substitution are not supported and therefore you cannot use the meta.id expression in the query statement.</p>
-</div>
-<div class="paragraph">
-<p>Instead of meta.id expression, you can use var id = meta.id in an N1QL query.</p>
-</div>
-<div class="paragraph">
-<p><strong>Invalid N1QL query</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>DELETE FROM `transactions` WHERE username = $meta.id;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Valid N1QL query</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>var id = meta.id;
-DELETE FROM `transactions` WHERE username = $id;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When you use a N1QL query inside a Function handler, remember to use an escaped identifier for bucket names with special characters (<code class="var">bucket-name</code>). Escaped identifiers are surrounded by backticks and support all identifiers in JSON</p>
-</div>
-<div class="paragraph">
-<p>For example:</p>
-</div>
-<div class="paragraph">
-<p>If the bucket name is beer-sample, then use the N1QL query such as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM `beer-sample` WHERE type…</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If bucket name is beersample, then use the N1QL query such as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM beersample WHERE type ...</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The example section provides an example for using N1QL queries {link}.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="timers"><a class="anchor" href="#timers"></a>Timers</h3>
-<div class="paragraph">
-<p>Timers is the third among the three added language constructs.</p>
-</div>
-<div class="paragraph">
-<p>Timers are asynchronous compute which offers Function execution in reference to wall-clock events. Timers also measure and track the amount of elapsed time and can be used while archiving of expired documents at a preconfigured time.</p>
-</div>
-<div class="paragraph">
-<p>Few important aspects related to timers are listed below:
-Timers follow the same timeout semantics as their Parent Functions. So, if a Function has an execution timeout of 60 seconds, each of the timers created from the Function inherits the same execution timeout value of 60 seconds.
-Timers may run on a different node than the one on which it was created.
-One execution of timers is guaranteed despite node failures and cluster rebalances.
-During Function backlogs, timers get eventually executed.
-The metadata bucket stores information about timers and its association with a Function.
-Ensure that the metadata bucket is not deleted or flushed, or the keys in metadata bucket gets updated.
-With an increase in the usage of timers, the metadata memory assignment must also be increased. Due to runtime or programmatic errors in the function handler code, if triggering of a timer fails, then timer execution may get permanently blocked.
-Bindings can be reused in timers. Bindings, created during the Function definition, can be accessed by the timer constructs in the Function handler code.
-Timers get deleted when the associated Function is deleted or undeployed.</p>
-</div>
-<div class="sect3">
-<h4 id="language-constructs-for-timers"><a class="anchor" href="#language-constructs-for-timers"></a>Language Constructs for Timers</h4>
-<div class="paragraph">
-<p>To create a timer use the below syntax:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>   createTimer(callback, timestamp, reference, context)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the createTimer syntax:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>callback - is the function called when the timer gets triggered. You need to ensure that the callback function is the top-level function that takes a single argument, the context.</p>
-</li>
-<li>
-<p>timestamp - is the JavaScript Date object timestamp at which the Function handler code must be executed.</p>
-</li>
-<li>
-<p>reference - is a unique string that gets passed. This string helps to identify the timer that is being created. All callback and references are scoped to the Function definition. Also, all references must be unique within the Function scope. When multiple timers are created with the same unique reference, old timers (with the same unique reference) get canceled.</p>
-</li>
-<li>
-<p>context - is any JavaScript object that can be serialized. When the timer gets triggered, the context specified during timer creation gets passed to the callback Function. For optimal performance, the context object payload needs to be lesser than 100 KB.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Sample Timer Construct</strong></p>
-</div>
-<div class="paragraph">
-<p>A sample createTimer language construct is provided for reference.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>   createTimer(DocTimerCallback, twoMinsPrior, meta.id, context)
-   Timer’s example
-   DocTimerCallback</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the sample construct:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>DocTimerCallback is the name of the function used in the Function handler code.</p>
-</li>
-<li>
-<p>twoMinsPrior is a JavaScript Date object.</p>
-</li>
-<li>
-<p>meta.id is a generic reference string that can be used in the Couchbase cluster.</p>
-</li>
-<li>
-<p>context is the JavaScript object that is used in the Function handler code.</p>
-</li>
-</ul>
-</div>
-<div class="sect4">
-<h5 id="sharding-of-timers"><a class="anchor" href="#sharding-of-timers"></a>Sharding of Timers</h5>
-<div class="paragraph">
-<p>Timers get automatically sharded across Eventing nodes and therefore are elastically scalable. Triggering of timers at or after a specified time interval is guaranteed. However, triggering of timers may either be on the same node (where the timer was created), or on a different node. Relative ordering between two specific timers cannot be maintained.</p>
-</div>
-<div class="sect5">
-<h6 id="debugging-and-logs"><a class="anchor" href="#debugging-and-logs"></a>Debugging and Logs</h6>
-<div class="paragraph">
-<p>Timers cannot be debugged using the Visual Debugger. For debugging, Couchbase recommends enclosing of timers in a try-catch block. When logging is enabled, timer related logs get captured as part of the Application logs.</p>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="elapsed-timestamps"><a class="anchor" href="#elapsed-timestamps"></a>Elapsed Timestamps</h5>
-<div class="paragraph">
-<p>During runtime, when a Function handler code contains a timestamp in the past (elapsed timestamp), the system executes the code in the next available time window, as soon as all the required resources are available.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="handling-delays"><a class="anchor" href="#handling-delays"></a>Handling Delays</h5>
-<div class="paragraph">
-<p>During Function backlogs, execution of timers may be delayed. To handle these delays, you need to program additional time window in your code. If your business logic is time-sensitive after this additional time window the code should refrain from its Function execution.</p>
-</div>
-<div class="paragraph">
-<p>The following is a sample code snippet which performs a timestamp check (my_deadline) before code execution.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>func callback(context)
-{
-  //context.my_deadline is the parameter in the timer payload
-    if new Date().getTime() &gt; context.my_deadline
-      {
-        // timestamp is back-dated, do not execute the rest of the timer
-        return;
-       }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Eventing Example section provides an example for Timers, {link}</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="rest-apis"><a class="anchor" href="#rest-apis"></a>REST APIs</h3>
-<div class="paragraph">
-<p>REST APIs are supported in a non-production environments.</p>
-</div>
-<div class="paragraph">
-<p>If you prefer to work with APIs to invoke a REST Endpoint from inside the Function, then use the below link to help you get started.</p>
-</div>
-<div class="paragraph">
-<p>Link: <a href="https://docs.couchbase.com/server/6.0/eventing/eventing-api.html" class="bare">https://docs.couchbase.com/server/6.0/eventing/eventing-api.html</a></p>
-</div>
+<p>Refer to <a href="eventing-supportedops.html" class="page">Supported Operations</a> section for details.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="functions-cli"><a class="anchor" href="#functions-cli"></a>Functions CLI</h2>
+<h2 id="function-lifecycle-operations"><a class="anchor" href="#function-lifecycle-operations"></a>Function Lifecycle Operations</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Apart from the UI option, you may use the CLI console to perform Function lifecycle operations from CI/CD.</p>
+<p>The Eventing Service offers various Function related operations, see <a href="eventing-functions-lifecycle-operations.html" class="page">Lifecycle Operations</a>.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Link: <a href="https://docs.couchbase.com/server/6.0/cli/cbcli/couchbase-cli-eventing-function-setup.html" class="bare">https://docs.couchbase.com/server/6.0/cli/cbcli/couchbase-cli-eventing-function-setup.html</a></p>
-</div>
-<div class="sect2">
-<h3 id="statistics"><a class="anchor" href="#statistics"></a>Statistics</h3>
-<div class="paragraph">
-<p>Eventing Statistics, for each deployed Function, can be fetched from an Eventing node using the Web Console. Eventing Statistics, for each deployed Function, can be fetched from an Eventing node using the Web Console.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>To fetch Eventing Statistics for a deployed Function, from the Couchbase Web Console &gt; Servers page, click Statistics.</p>
-</li>
-<li>
-<p>Click on a specific graph to expand. The Eventing Service Statistics provides four options:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Processed - displays the number of processed Functions.</p>
-</li>
-<li>
-<p>Failures - displays the number of failures while processing the Function handler code.</p>
-</li>
-<li>
-<p>Backlogs - displays the number of mutations to be processed by a Function.</p>
-</li>
-<li>
-<p>Timeouts - displays the number of Functions which have encountered a timeout condition.</p>
-</li>
-</ul>
-</div>
-</li>
-</ol>
-</div>
+<p>The <a href="eventing-examples.html" class="page">Examples</a> section provides four distinct examples for the Eventing Service.</p>
 </div>
 </div>
 </div>
@@ -2293,15 +1837,56 @@ Timers get deleted when the associated Function is deleted or undeployed.</p>
     <a class="nav-link" href="eventing-overview.html">Handle Events</a>
     </span>
 <ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
+    </span>
+  </li>
   <li class="nav-item is-current-page is-active" data-depth="2">
     <span class="nav-line">
+    <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -2311,6 +1896,11 @@ Timers get deleted when the associated Function is deleted or undeployed.</p>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

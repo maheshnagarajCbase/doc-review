@@ -112,12 +112,14 @@
 <div class="paragraph">
 <p>In the Message Queue and Enterprise Bus implementations, application servers perform a write operation on to the data platform. Additionally, in order to track data mutations, these applications write to a third-party Message Queue or to an Enterprise Server Bus.</p>
 </div>
+<div class="sect2">
+<h3 id="comparing-eventing-service-with-message-queue"><a class="anchor" href="#comparing-eventing-service-with-message-queue"></a>Comparing Eventing Service with Message Queue</h3>
 <div class="paragraph">
-<p>Comparing Eventing Service with Message Queue Method
-To track data mutations, the Message Queue implementation adds a new layer. This new layer addition introduces dual-write problems. With multiple functional entities such as application layers, message queues and data platform entities, the debugging complexity increases. The overall data governance becomes a bit tricky as developers need to take into account the fault-handling, debugging and other management configurations. This in turn increases your total cost of ownership.</p>
+<p>To track data mutations, the Message Queue implementation adds a new layer. This new layer addition introduces dual-write problems. With multiple functional entities such as application layers, message queues and data platform entities, the debugging complexity increases. The overall data governance becomes a bit tricky as developers need to take into account the fault-handling, debugging and other management configurations. This in turn increases your total cost of ownership.</p>
 </div>
 <div class="paragraph">
 <p>Eventing Service is native to Couchbase Server and does not need a new layer to record or propagate data changes. With no-dual writes, the write-failure condition is eliminated. Centralized data governance, layer consolidation, option to debug and reduced TCO aspects play an active role in increasing the overall user experience with the Couchbase Data Platform.</p>
+</div>
 </div>
 </div>
 </div>
@@ -125,14 +127,16 @@ To track data mutations, the Message Queue implementation adds a new layer. This
 <h2 id="polling"><a class="anchor" href="#polling"></a>Polling</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the Polling implementation, application servers perform a write operation to the data platform. Another application polls this data platform in order to track data changes.</p>
+<p>In the Polling implementation, application servers perform a write operation. Another application polls the data platform in order to track data changes.</p>
 </div>
+<div class="sect2">
+<h3 id="comparing-eventing-service-with-polling"><a class="anchor" href="#comparing-eventing-service-with-polling"></a>Comparing Eventing Service with Polling</h3>
 <div class="paragraph">
-<p>Comparing Eventing Service with Polling Method
-When large volumes of frequently changing data is encountered, the batch system in polling becomes ineffective. Factors like such as CPU utilization, non-reactive tracking of data mutations, code duplication issues, contribute in increasing the system complexity. With these increased complexities, you cannot scale using the polling implementation.</p>
+<p>When large volumes of frequently changing data are encountered, the batch system in polling becomes ineffective. Factors such as CPU utilization, non-reactive tracking of data mutations, code duplication issues, contribute in increasing the system complexity. With these increased complexities, you cannot scale using the polling implementation.</p>
 </div>
 <div class="paragraph">
 <p>The Eventing Service, on the other hand, can manage data changes within the cluster and also propagate these data changes to another database or to an end-point. Implemented as a state-less compute operation, the Eventing Service, utilizes latest trends in compute (multi-core CPU) and can scale easily.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1763,13 +1767,54 @@ When large volumes of frequently changing data is encountered, the batch system 
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1779,6 +1824,11 @@ When large volumes of frequently changing data is encountered, the batch system 
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

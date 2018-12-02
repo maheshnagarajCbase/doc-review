@@ -108,129 +108,39 @@
   </div>
 <article class="doc">
 <h1 class="page">Data Enrichment</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Goal</strong>: A document contains attributes whose form makes them difficult to search on.
-Therefore, on the document&#8217;s creation or modification, a new attribute should be created to accompany each original attribute; this new attribute being instantiated with a value that directly corresponds to that of its associated, original attribute; but takes a different form, thereby becoming more supportive of search.
-Original attributes are subsequently retrievable based on successful searches performed on new attributes.</p>
+<p>This example illustrates how to perform a sample data enrichment on a document.</p>
 </div>
-<div class="paragraph">
-<p><strong>Implementation</strong>: Create a JavaScript function that contains an <strong>OnUpdate</strong> handler.
-The handler listens for data-changes within a specified, source bucket.
-When any document within the bucket is created or mutated, the handler executes a user-defined routine.
-In this example, if the created or mutated document contains two specifically named fields containing IP addresses (these respectively corresponding to the beginning and end of an address-range), the handler-routine converts each IP address to an integer.
-A new document is created in a specified, target bucket: this new document is identical to the old, except that it has two additional fields, which contain integers that correspond to the IP addresses.
-The original document, in the source bucket, is not changed.</p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="need-for-data-enrichment"><a class="anchor" href="#need-for-data-enrichment"></a>Need for Data Enrichment</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Preparations</strong></p>
+<p>Querying certain specific types of attribute is not easy. These attributes are not search supportive.</p>
 </div>
 <div class="paragraph">
-<p>This example requires the creation of three buckets: metadata, target and source buckets.</p>
+<p>When documents with such attribute undergo mutations, using Couchbase Functions, an additional attribute is appended. However, original attributes are not modified. Subsequently, when the document needs to be retrieved, you can query using the newly appended attribute. The enriched document now becomes search-supportive.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="developing-the-handler-code"><a class="anchor" href="#developing-the-handler-code"></a>Developing the Handler Code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a JavaScript function that contains an OnUpdate handler. This handler listens for data-changes within a source bucket. When a document within this source bucket undergoes mutation, the handler executes a user-defined routine. The handler code converts each IP address (both the beginning and the end of an address-range) to an integer.</p>
 </div>
 <div class="paragraph">
-<p>Proceed as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Create target and metadata buckets.
-To create a bucket, refer to <a href="../manage/manage-buckets/create-bucket.html" class="page">Create a Bucket</a>.
-The target bucket contains documents that will be created by the Function.
-Don’t add any documents explicitly to this bucket.</p>
-</li>
-<li>
-<p>Follow Step 1.
-and create a source bucket.
-In the Source bucket screen:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Click <strong>Add Document</strong>.</p>
-</li>
-<li>
-<p>In the <strong>Add Document</strong> window, specify the name <strong>SampleDocument</strong> as the <strong>New</strong>*Document ID*</p>
-</li>
-<li>
-<p>Click <strong>Save</strong>.</p>
-</li>
-<li>
-<p>In the <strong>Edit Document</strong> dialog, paste the following within the edit panel.</p>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 100%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">{</p>
-<p class="tableblock">"country": "AD",</p>
-<p class="tableblock">"ip_end": "5.62.60.9",</p>
-<p class="tableblock">"ip_start": "5.62.60.1"</p>
-<p class="tableblock">}</p></td>
-</tr>
-</tbody>
-</table>
-</li>
-<li>
-<p>Click <strong>Save</strong>.
-This step concludes all required preparations.</p>
-</li>
-</ol>
-</div>
-</li>
-</ol>
+<p>In this example, the handler executes the routine, adds two additional fields, and creates a new document in the target bucket. This new document is identical to the original one, except that it has two additional fields. You can query the document using these two additional fields.</p>
 </div>
 <div class="paragraph">
-<p><strong>Procedure</strong></p>
+<p>A sample handler code for data enrichment is provided.</p>
 </div>
-<div class="paragraph">
-<p>Proceed as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>From the <strong>Couchbase Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>ADD FUNCTION</strong>, to add a new Function.</p>
-</li>
-<li>
-<p>In the <strong>ADD FUNCTION</strong> dialog, for individual Function elements provide the below information:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For the Source Bucket drop-down, select the <strong>source</strong> <em>option</em> that was created for this purpose.</p>
-</li>
-<li>
-<p>For the Metadata Bucket drop-down, select the <strong>metadata</strong> <em>option</em> that was created for this purpose.</p>
-</li>
-<li>
-<p>Enter <strong>enrich_ip_nums</strong> as the name of the Function you are creating in the <strong>Function</strong>*Name* text-box.</p>
-</li>
-<li>
-<p>Enter <strong>Enrich a document, converts IP Strings to Integers that are stored in new attributes,</strong> in the <strong>Description</strong> text-box.</p>
-</li>
-<li>
-<p>For the <strong>Settings</strong> option, use the default values.</p>
-</li>
-<li>
-<p>For the Bindings option, specify <strong>target</strong> as the name of the bucket, and specify <strong>tgt</strong> as the associated value.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>After providing all the required information in the <strong>ADD FUNCTION</strong> dialog, click <strong>Next</strong>: <strong>Add Code</strong>.
-The <strong>enrich_ip_nums</strong> dialog appears.
-The <strong>enrich_ip_nums</strong> dialog initially contains a placeholder code block.
-You will substitute your actual <strong>enrich_ip_nums</strong> code in this block.</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/addfunctions_ex1.png" alt="addfunctions ex1" width="400">
-</div>
-</div>
-</li>
-<li>
-<p>Copy the following Function, and paste it in the placeholder code block of the <strong>enrich_ip_nums</strong> dialog:</p>
 <div class="listingblock">
 <div class="content">
-<pre> function OnUpdate(doc, meta) {
+<pre>function OnUpdate(doc, meta) {
   log('document', doc);
   doc["ip_num_start"] = get_numip_first_3_octets(doc["ip_start"]);
   doc["ip_num_end"]   = get_numip_first_3_octets(doc["ip_end"]);
@@ -251,26 +161,86 @@ function get_numip_first_3_octets(ip)
 }</pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h3>
 <div class="paragraph">
-<p>After pasting, the screen appears as displayed below:</p>
+<p>Before you begin, you’ll need to ensure that:</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>Three buckets, metadata, target and source buckets, are created. See <a href="eventing-example-creating-buckets.html" class="page">Creating Buckets</a>.</p>
+</li>
+<li>
+<p>A document, Sample Document, is added in the Source bucket. Edit this document and enter the below provided details:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>{
+   "country": "AD",
+   "ip_end": "5.62.60.9",
+   "ip_start": "5.62.60.1"
+}</pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="procedure"><a class="anchor" href="#procedure"></a>Procedure</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION, to add a new Function.</p>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, for individual Function elements, provide the below information:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>For the Source Bucket drop-down, select the source bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>For the Metadata Bucket drop-down, select the metadata bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>Enter enrich_ip_nums as the name of the Function you are creating in the Function Name text-box.</p>
+</li>
+<li>
+<p>Enter Enrich a document, converts IP Strings to Integers that are stored in new attributes, in the Description text-box.</p>
+</li>
+<li>
+<p>For the Settings option, use the default values.</p>
+</li>
+<li>
+<p>For the Bindings option, specify the target as the name of the bucket, and specify tgt as its associated value.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, click Next: Add Code. The enrich_ip_nums dialog appears. The enrich_ip_nums dialog initially contains a placeholder code block. You will substitute your actual enrich_ip_nums code in this block.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/addfunctions_ex1.png" alt="addfunctions ex1" width="400">
+</div>
+</div>
+</li>
+<li>
+<p>Copy the sample Function handler code and paste it in the placeholder code block of the enrich_ip_nums dialog.</p>
+</li>
+<li>
+<p>After pasting, the screen appears as displayed below:</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/enrich_ip_nums.png" alt="enrich ip nums" width="500">
 </div>
 </div>
-<div class="paragraph">
-<p>The <strong>OnUpdate</strong> routine specifies that when a change occurs to data within the bucket, the routine <strong>get_numip_first_3_octets</strong> is run on each document that contains <strong>ip_start</strong> and <strong>ip_end</strong>.
-A new document is created whose data and metadata are based on those of the document on which <strong>get_numip_first_3_octets</strong> is run; but with the addition of <strong>ip_num_start</strong> and <strong>ip_num_end data-fields</strong>, which contain the numeric values returned by <strong>get_numip_first_3_octets</strong>.
-The <strong>get_numip_first_3_octets</strong> routine splits the IP address, converts each fragment to a numeral, and adds the numerals together, to form a single value; which it returns.</p>
-</div>
 </li>
 <li>
-<p>Click <strong>Save</strong>.</p>
+<p>Click Save.</p>
 </li>
 <li>
-<p>To return to the Eventing screen, click <strong>Eventing</strong> and click on the newly created Function name.
-The Function <strong>enrich_ip_nums</strong> is listed as a defined Function.</p>
+<p>To return to the Eventing screen, click Eventing and click on the newly created Function name. The Function enrich_ip_nums is listed as a defined Function.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/deploy_enrich_ip_nums.png" alt="deploy enrich ip nums" width="400">
@@ -278,21 +248,26 @@ The Function <strong>enrich_ip_nums</strong> is listed as a defined Function.</p
 </div>
 </li>
 <li>
-<p>Click <strong>Deploy</strong>.</p>
+<p>Click Deploy.</p>
 </li>
 <li>
-<p>From the <strong>Confirm Deploy Function</strong> dialog, click <strong>Deploy Function</strong>.
-From this point, the defined Function is executed on all existing documents and on subsequent mutations.</p>
+<p>In the Confirm Deploy Function dialog, from the Feed boundary drop-down, select Everything and click Deploy Function. From this point, the defined Function is executed on all existing documents and on subsequent mutations.</p>
 </li>
 <li>
-<p>To check results of the deployed Function, click the <strong>Documents</strong> tab.</p>
+<p>To check results of the deployed Function, click the Documents tab.</p>
 </li>
 <li>
-<p>Select <strong>target</strong> bucket from the <strong>Bucket</strong> drop-down.As this shows, a version of <strong>SampleDocument</strong> has been added to the <strong>target</strong> bucket.
-It contains all the attributes of the original document, with the addition of <strong>ip_num_start</strong> and <strong>ip_num_end</strong>; which contain the numeric values that correspond to <strong>ip_start</strong> and <strong>ip_end</strong>, respectively.
-Additional documents added to the <strong>source</strong> bucket, which share the <strong>ip_start</strong> and <strong>ip_end</strong> attributes, will be similarly handled by the defined Function: creating such a document, and changing any attribute in such a document both cause the Function&#8217;s execution.</p>
+<p>Select target bucket from the Bucket drop-down.<br>
+As this shows, a version of SampleDocument has been added to the target bucket. It contains all the attributes of the original document, with the addition of ip_num_start and ip_num_end; which contain the numeric values that correspond to ip_start and ip_end, respectively. Additional documents added to the source bucket, which share the ip_start and ip_end attributes, will be similarly handled by the defined Function: creating such a document, and changing any attribute in such a document both cause the Function’s execution.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>To summarize, since fetching a document by querying the document’s IP address, was a tedious process. Therefore, using the IP addresses, we enhanced the existing document and added two new attributes. Now, to fetch the document, we queried the cluster using the newly appended attributes, which was easier than the earlier method of querying it based on the IP address.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </article>
 </main>
@@ -1921,13 +1896,54 @@ Additional documents added to the <strong>source</strong> bucket, which share th
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1937,6 +1953,11 @@ Additional documents added to the <strong>source</strong> bucket, which share th
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item is-current-path is-active" data-depth="2">

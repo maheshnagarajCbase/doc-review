@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminology | Couchbase Docs (Local)</title>
-    <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-Terminologies.html">
+    <title>Terminologies | Couchbase Docs (Local)</title>
+    <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-terminologies.html">
     <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
     <meta name="dcterms.subject" content="server">
     <meta name="dcterms.identifier" content="6.0">
@@ -95,161 +95,103 @@
 <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="../introduction/intro.html">Couchbase Server</a></li>
-    <li class="crumb"><a href="eventing-Terminologies.html">Terminology</a></li>
+    <li class="crumb"><a href="eventing-terminologies.html">Terminologies</a></li>
   </ul>
 </nav>
 <div class="tools" role="navigation">
   <ul>
-    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/eventing/pages/eventing-Terminologies.adoc" title="Edit this Page">Edit</a></li>
+    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/eventing/pages/eventing-terminologies.adoc" title="Edit this Page">Edit</a></li>
   </ul>
 </div>
   </div>
 <article class="doc">
-<h1 class="page">Terminology</h1>
-<div id="preamble">
-<div class="sectionbody">
-<div class="quoteblock abstract">
-<blockquote>
-While using Functions, the following terminologies are used:
-</blockquote>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
-<div class="sectionbody">
+<h1 class="page">Terminologies</h1>
 <div class="paragraph">
-<p>Functions offers a computing paradigm using which developers can handle data changes.
-Functions are either <strong>OnUpdate</strong> or <strong>OnDelete</strong>.
-Resources are managed at or above a Function level, and the containing Function scopes the state of all handlers.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="handler"><a class="anchor" href="#handler"></a>Handler</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>A stateless, short-running code-fragment that reacts to a specified event.
-One or more handlers together constitute a Function.
-A handler must execute from start to finish, before a specified timeout-duration.
-Currently, <strong>OnUpdate</strong> and <strong>OnDelete</strong> are the two supported handlers.
-Couchbase Functions support multiple <strong>OnUpdate</strong>/<strong>OnDelete</strong> handlers during the Function definition process.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-In the Couchbase Server 6.0 BETA release, the handler code size is limited to 128KB.
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="statelessness"><a class="anchor" href="#statelessness"></a>Statelessness</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The persistent state of a Function is captured by entities listed below, while any state that appears on the execution stack is ephemeral.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>The metadata bucket.</p>
-</li>
-<li>
-<p>The document being observed and its Extended Attributes.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="buckets"><a class="anchor" href="#buckets"></a>Buckets</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>There are two distinct buckets: source bucket and metadata bucket.</p>
+<p>We recommend that you understand the following Eventing Service related terminologies, and refer to them as you need them.</p>
 </div>
 <div class="paragraph">
+<p><strong>Data Mutations</strong></p>
+</div>
+<div class="paragraph">
+<p>Create, update, expiry, or delete operation on a document is termed as data mutations.</p>
+</div>
+<div class="paragraph">
+<p><strong>Event</strong></p>
+</div>
+<div class="paragraph">
+<p>A single data mutation is consider to be an event.</p>
+</div>
+<div class="paragraph">
+<p><strong>Couchbase Functions</strong></p>
+</div>
+<div class="paragraph">
+<p>Couchbase Functions, also referred to as Functions, offers a computing paradigm to handle data mutations. Functions handle data mutations according to an Event-Condition-Action model.</p>
+</div>
+<div class="paragraph">
+<p><strong>Stateless</strong></p>
+</div>
+<div class="paragraph">
+<p>In the serverless computing space, stateless can be defined as a set of conditions at a particular moment in time.</p>
+</div>
+<div class="paragraph">
+<p>The document under consideration along with its extended attributes and the metadata bucket entities are considered to be in a persistent state (non-stateless, get it clarified!!).</p>
+</div>
+<div class="paragraph">
+<p>In the Eventing Service framework, all other entities that are present on the  execution stack are considered to be in an ephemeral state.</p>
+</div>
+<div class="paragraph">
+<p><strong>Function Handler Code</strong></p>
+</div>
+<div class="paragraph">
+<p>Handler is a short-running code-fragment which gets triggered as a response to a specific event. A collection of handlers constitute a Function.</p>
+</div>
+<div class="paragraph">
+<p>Function handler code are stateless entities that are executed from start to finish. Couchbase Server currently supports OnUpdate and OnDelete handlers. You can have more one than one handlers in a particular Function definition.</p>
+</div>
+<div id="source-buckets" class="paragraph">
 <p><strong>Source Bucket</strong></p>
 </div>
 <div class="paragraph">
-<p>Couchbase Functions use a bucket to track data mutations. This bucket is termed as the source bucket. The source bucket can be either Couchbase or Ephemeral bucket type. However, memcached bucket types are not supported.</p>
+<p>Couchbase Functions listens to data mutations from a specific bucket. This bucket is termed as source bucket. The source bucket can be either Couchbase or Ephemeral bucket type. However, memcached bucket types are not supported.
+When you are creating a Function, you need to specify a source bucket. The handler code polls this bucket to track data mutations.</p>
 </div>
 <div class="paragraph">
-<p>When you are creating a function, you need to specify a source bucket. The handler code polls this bucket to track data mutations.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-You can use a common source bucket to listen to multiple Functions running different code.
-</td>
-</tr>
-</table>
+<p>You can use a common source bucket to listen to multiple Functions running different code.</p>
 </div>
 <div class="paragraph">
-<p>When a source bucket is deleted, all deployed functions associated with this source<br>
-bucket, are undeployed.</p>
+<p>When a source bucket is deleted, all deployed Functions associated with this source bucket, are undeployed.</p>
 </div>
-<div class="paragraph">
-<p>After processing the handler code, documents can be stored in a different bucket. For understanding purposes, this bucket can be termed as a destination bucket.</p>
-</div>
-<div class="paragraph">
-<p>At times, the handler code can trigger data mutations. To avoid cyclic generation of data changes, refer to <a href="troubleshooting-best-practices.html#cyclicredun" class="page">Bucket Allocation Considerations</a>.</p>
-</div>
-<div class="paragraph">
+<div id="metadata-buckets" class="paragraph">
 <p><strong>Metadata Bucket</strong></p>
 </div>
 <div class="paragraph">
-<p>Metadata bucket stores artifacts such as timers, DCP streams, worker allocations along with internal checkpoint information.</p>
+<p>Couchbase Functions uses a bucket to store artifacts such as timers, DCP streams, worker allocations along with other internal checkpoint information. This bucket is termed as the metadata bucket.</p>
 </div>
 <div class="paragraph">
-<p>When you are creating a Function, ensure that a separate bucket is destined as a<br>
+<p>When you are creating a Function, ensure that a separate bucket is destined as a
 metadata bucket. You can use a common metadata bucket across multiple Functions.</p>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-At any point, refrain from deleting the metadata bucket. Also, ensure that the Function handler code does not perform a write operation on the metadata bucket.
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>At any point in time, refrain from deleting the metadata bucket. Also, ensure that the Function handler code does not perform a write operation on the metadata bucket.</p>
 </div>
 <div class="paragraph">
-<p>If a metadata bucket gets accidentally deleted, then all deployed functions are<br>
-undeployed and associated indexes get dropped.</p>
+<p>If a metadata bucket gets accidentally deleted, then all deployed Functions are undeployed and associated indexes get dropped.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="workers"><a class="anchor" href="#workers"></a>Workers</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Workers can be defined as an execution unit that is assigned a group of vBuckets.
-The worker units are used mostly during Function execution.</p>
+<p><strong>Timer</strong></p>
 </div>
+<div class="paragraph">
+<p>Timers are asynchronous compute which offers Function execution in reference to wall-clock events. Timers also measure and track the amount of elapsed time.</p>
 </div>
+<div id="bindings" class="paragraph">
+<p><strong>Bindings</strong></p>
 </div>
-<div class="sect1">
-<h2 id="section_mzd_l1p_m2b"><a class="anchor" href="#section_mzd_l1p_m2b"></a>Bindings</h2>
-<div class="sectionbody">
 <div class="paragraph">
 <p>A binding allows separating of environment specific variables from the handler code.</p>
 </div>
 <div class="paragraph">
-<p>You can add bindings as a name-value pair, where name is the actual name of the bucket in the cluster, and value is the alias that you can use to refer to the bucket from your<br>
-handler code.</p>
+<p>Bindings can be of various types. In the current implementation, we have bindings of the type Alias. You can create an alias with a name value pair; bucket name as a name and value as a variable are paired.
+In the handler code you can reference the bucket name by using the variable.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -266,82 +208,88 @@ Bindings are mandatory when your handler code performs any bucket related operat
 <div class="paragraph">
 <p>Bindings ensure easy porting of source code across different environments. You can export-import Functions from test-to-test, test-to-production, or production-to-production environments, without making code changes.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="function-settings"><a class="anchor" href="#function-settings"></a>Function Settings</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The log levels, script timeout, and workers allocation are additional options available during the Function definition process.</p>
+<p><strong>Workers</strong></p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Log Levels</strong>: Use log levels to determine the granularity of log messages.</p>
-</li>
-<li>
-<p><strong>Script Timeout</strong>: Script Timeout provides a timeout option to terminate a non-responsive Function.</p>
-</li>
-<li>
-<p><strong>Workers</strong>: Workers allocate the number of worker threads for a specific Function.</p>
 <div class="paragraph">
-<p>For a defined Function, Couchbase Server limits the maximum number of workers to 10.
-This upper limit is configured for system optimization purposes.
-In the Function definition, if the number of workers exceeds a set threshold, then the system automatically generates a warning message.
-However, this warning message does not prevent deployment of the Function.</p>
+<p>Workers are execution units that are assigned a group of vBuckets. Worker units are used during Function execution to process events.</p>
 </div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="deploy"><a class="anchor" href="#deploy"></a>Deploy</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>The deploy operation activates a Function.
-Multiple Functions can be deployed in a cluster.
-Couchbase server performs source validations before deploying a Function, and only valid Functions get deployed.
-The deploy operation transpiles the code and creates the executable v8 artifacts.
-The source code of a deployed Function cannot be edited.
-The Function must be in a deployed status to process events.
-Once you deploy a Function, depending on the Feed Boundary conditions, the Function execution starts processing the data mutations.
-Deployment of a Function triggers actions such as creating of necessary metadata, initiating worker processes, calculating initial partitions, and creating checkpoints of processed stream data.
-To edit a deployed Function, you must first un-deploy the Function.</p>
+<p>You can allocate workers to scale-up or scale-down and thereby control the time for executing a  Function.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="feed-boundary"><a class="anchor" href="#feed-boundary"></a>Feed Boundary</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>Feed Boundary is a time milestone used during a Function configuration.
-Using the Feed Boundary option, you can either invoke a Function on all data mutations available in the cluster or choose to invoke a Function during future instances of data mutation, post Function deployment.</p>
+<p><strong>Deploy a Function</strong></p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="undeploy"><a class="anchor" href="#undeploy"></a>Undeploy</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>An undeploy operation causes the Function to stop processing events.
-All allocated worker-processes get terminated, and any runtime resources acquired by the Function gets released.
-Functions in an undeployed state allow editing of the Function handler code.
-After a successful undeploy operation, system does not retain the previous state.
-During redeployment, the Eventing service cannot resume from a prior state before undeployment.
-An undeployed Function retains the memory of its prior deployment, if necessary.
-Newly created handlers start in an undeployed state.</p>
+<p>The deploy operation activates a Function. Functions must be in a deployed status to process events. Couchbase Server performs a source validation step before  Function deployment.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="delete"><a class="anchor" href="#delete"></a>Delete</h2>
-<div class="sectionbody">
 <div class="paragraph">
-<p>When a Function gets deleted, the source code implementing the Function, all processing checkpoints, and other artifacts in the metadata provider are purged.
-Before deleting, make sure you have undeployed the Function.</p>
+<p><strong>Undeploy a Function</strong></p>
 </div>
+<div class="paragraph">
+<p>The undeploy operation terminates processing of events. Allocated workers of the undeployed Function get terminated. Additionally, other runtime resources acquired by the Function are released.
+To edit the handler code, you must undeploy a Function.</p>
 </div>
+<div class="paragraph">
+<p><strong>Delete a Function</strong></p>
+</div>
+<div class="paragraph">
+<p>A delete operations removes the Function from the cluster. When a Function is deleted, the source code implementing the Function, all processing checkpoints, and other artifacts in the metadata provider are purged.
+To delete a Function, you must first undeploy the Function.</p>
+</div>
+<div class="paragraph">
+<p><strong>Feed Boundary</strong></p>
+</div>
+<div class="paragraph">
+<p>The feed boundary attribute is used as a time milestone during the Function definition process. Using this time milestone, you can choose to invoke a Function on all data mutations available in the cluster or on future instances of data mutation, post Function deployment.</p>
+</div>
+<div class="paragraph">
+<p><strong>Function Script Timeout</strong></p>
+</div>
+<div class="paragraph">
+<p>Function Script Timeout is a time attribute which indicates when to terminate a non-responsive Function.</p>
+</div>
+<div class="paragraph">
+<p><strong>Visual Debugger</strong></p>
+</div>
+<div class="paragraph">
+<p>Visual Debugger, also termed as debugger, is a tool to debug data mutations. When you’re running into issues during execution of the Function handler code, using debugger, you can set breakpoints and step through the code in a Chrome browser.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Rebalance</strong></p>
+</div>
+<div class="paragraph">
+<p>Eventing Rebalancing is the process of redistributing Eventing workload across nodes.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Failover</strong></p>
+</div>
+<div class="paragraph">
+<p>Failing over an Eventing node means that Couchbase Server removes the Eventing node from a cluster and makes replicated data at other nodes available for client requests.</p>
+</div>
+<div class="paragraph">
+<p><strong>Eventing Statistics</strong></p>
+</div>
+<div class="paragraph">
+<p>The Eventing Service provides various statistical information. These statistical inputs help you to arrive at informed decisions.</p>
+</div>
+<div class="paragraph">
+<p><strong>Transpiler</strong></p>
+</div>
+<div class="paragraph">
+<p>A transpiler accepts source code provided as input from one high-level programming language and produces an equivalent code in another high-level programming language.</p>
+</div>
+<div class="paragraph">
+<p><strong>Source Map</strong></p>
+</div>
+<div class="paragraph">
+<p>Source map provides a mapping between the transpiled code and the original function handler code. Source maps are used during debugging.</p>
+</div>
+<div class="paragraph">
+<p><strong>Infinite Function Recursions</strong></p>
+</div>
+<div class="paragraph">
+<p>Function handlers can in turn trigger data mutations. Destination buckets having other Function handlers configured to track data mutations triggers an infinite Function recursions scenario. As an Application Developer, you need to avoid this cyclic generation while using a series of handlers.</p>
 </div>
 </article>
 </main>
@@ -1970,13 +1918,54 @@ Before deleting, make sure you have undeployed the Function.</p>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1986,6 +1975,11 @@ Before deleting, make sure you have undeployed the Function.</p>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

@@ -109,18 +109,18 @@
 <article class="doc">
 <h1 class="page">Creating Buckets</h1>
 <div class="sect1">
-<h2 id="6-1-1-creating-a-metadata-bucket"><a class="anchor" href="#6-1-1-creating-a-metadata-bucket"></a>6.1.1 Creating a Metadata Bucket</h2>
+<h2 id="creating-a-metadata-bucket"><a class="anchor" href="#creating-a-metadata-bucket"></a>Creating a Metadata Bucket</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>For the four examples, a common metadata buckets can be used.</p>
 </div>
 <div class="paragraph">
-<p>To create a metadata bucket.</p>
+<p>To create a metadata bucket, proceed as follows:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From the Couchbase Web Console &gt; click Buckets &gt; ADD BUCKET.</p>
+<p>From the Couchbase Web Console &gt; Buckets &gt; click ADD BUCKET.</p>
 </li>
 <li>
 <p>In the Add Data Bucket screen:</p>
@@ -133,19 +133,13 @@
 <p>Memory Quota: For a server node, specify the memory quota for the metadata bucket  in MB.</p>
 </li>
 <li>
-<p>For Bucket Type, select either Couchbase or Memcached option.</p>
-</li>
-<li>
-<p>For Eventing Service, the Ephemeral type of buckets are not supported.</p>
+<p>For Bucket Type, select either Couchbase or Memcached option. For Eventing Service, the Ephemeral type of buckets are not supported.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>In the Advanced bucket settings pane, from the Flush pane, select Enable.</p>
-</li>
-<li>
-<p>If the flush option is enabled, when the bucket gets flushed, all items in the bucket are removed.</p>
+<p>In the Advanced bucket settings pane, from the Flush pane, select Enable. If the flush option is enabled when the bucket gets flushed, all items in the bucket are removed.</p>
 </li>
 <li>
 <p>For all the other Advanced bucket settings options, use their default values.</p>
@@ -156,14 +150,14 @@
 </ol>
 </div>
 <div class="sect2">
-<h3 id="6-1-2-creating-a-source-bucket"><a class="anchor" href="#6-1-2-creating-a-source-bucket"></a>6.1.2 Creating a Source Bucket</h3>
+<h3 id="creating-a-source-bucket"><a class="anchor" href="#creating-a-source-bucket"></a>Creating a Source Bucket</h3>
 <div class="paragraph">
-<p>To create a source bucket.</p>
+<p>To create a source bucket, proceed as follows:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From the Couchbase Web Console &gt; click Buckets &gt; ADD BUCKET.</p>
+<p>From the Couchbase Web Console &gt; Buckets &gt; click ADD BUCKET.</p>
 </li>
 <li>
 <p>In the Add Data Bucket screen:</p>
@@ -182,10 +176,7 @@
 </div>
 </li>
 <li>
-<p>In the Advanced bucket settings pane, from the Flush pane, select Enable.</p>
-</li>
-<li>
-<p>If the flush option is enabled, when the bucket gets flushed, all items in the bucket are removed .</p>
+<p>In the Advanced bucket settings pane, from the Flush pane, select Enable. If the flush option is enabled, all items in the bucket are removed when the bucket gets flushed.</p>
 </li>
 <li>
 <p>For all the other Advanced bucket settings options, use their default values.</p>
@@ -1837,13 +1828,54 @@ Follow the above procedure to create other buckets such as users, target, flagge
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1853,6 +1885,11 @@ Follow the above procedure to create other buckets such as users, target, flagge
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item is-current-path is-active" data-depth="2">

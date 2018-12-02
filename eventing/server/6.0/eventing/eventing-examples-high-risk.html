@@ -108,71 +108,30 @@
   </div>
 <article class="doc">
 <h1 class="page">Risk Assessment</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Goal</strong>: This example illustrates how to leverage Eventing Service in the Banking and Financial domain.
-When a credit card transaction exceeds the user’s available credit limit, to indicate a high-risk transaction, an alert can be generated.</p>
+<p>This example illustrates how to leverage the Eventing service in the Banking and Financial domain by performing a sample risk assessment for a credit card transaction.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="need-for-risk-assessment"><a class="anchor" href="#need-for-risk-assessment"></a>Need for Risk Assessment</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To mitigate risks, transaction assessment cannot be performed as a batch job, but needs to be performed in near real-time. After every transaction, the transaction amount needs to be validated against the total available credit limit. An alert, as an early warning, should be generated to mitigate risks during subsequent transactions.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="developing-your-handler-code"><a class="anchor" href="#developing-your-handler-code"></a>Developing your Handler Code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a JavaScript function that contains an OnUpdate handler. This handler listens for data-changes within a source bucket. The OnUpdate handler executes a user-defined routine for every credit card transaction.</p>
 </div>
 <div class="paragraph">
-<p>This example requires you to create four buckets: *flagged_transactions, users, metadata*<em>and</em> *transactions*<em>buckets</em>.
-For steps on how to create buckets, see <a href="../manage/manage-buckets/create-bucket.html" class="page">Create a Bucket</a>.</p>
+<p>In this example, for every transaction, the handler code checks if the transaction amount is less than the user’s available credit limit. If this condition is breached, then the transaction is flagged as a high-risk transaction. The handler then moves this transaction to a different bucket, the flagged_transactions bucket. After moving this transaction to a new bucket, the handler enriches the document with predefined comments and appends a reason code. In the last part, the handler performs a currency validation step. On a mismatch, a currency mismatch alert is generated.</p>
 </div>
-<div class="paragraph">
-<p><strong>Implementation</strong>: Create a JavaScript Function that contains an <strong>OnUpdate</strong> handler.
-The handler listens to data-changes within a specified, <strong>transactions</strong> source bucket.
-When a document within the source bucket is created or mutated, the handler executes a user-defined routine.
-In this example, if the created or mutated document contains a high-risk transaction, a new document gets created in a specified, <strong>flagged_transactions</strong> bucket.</p>
-</div>
-<div class="paragraph">
-<p>Proceed as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>From the <strong>Couchbase Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>ADD FUNCTION</strong>,to add a new Function.
-The <strong>ADD FUNCTION</strong> dialog appears.</p>
-</li>
-<li>
-<p>In the <strong>ADD FUNCTION</strong> dialog, for individual Function elements provide the below information:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For the Source Bucket drop-down, select <strong>transactions</strong> that was created for this purpose.</p>
-</li>
-<li>
-<p>For the Metadata Bucket drop-down, select <strong>metadata</strong> that was created for this purpose.</p>
-</li>
-<li>
-<p>Enter <strong>high_risks_transactions</strong> as the name of the Function you are creating in the <strong>Function</strong>*Name* text-box.</p>
-</li>
-<li>
-<p>Enter <strong>Functions that computes risky transaction and flags them,</strong> in the <strong>Description</strong> text-box.</p>
-</li>
-<li>
-<p>For the <strong>Settings</strong> option, use the default values.</p>
-</li>
-<li>
-<p>For the <strong>Bindings</strong> option, add two bindings.
-For the first binding specify <strong>users</strong> as the <strong>name</strong> of the bucket, and specify <strong>user</strong> as the associated <strong>value</strong>.
-For the second binding, specify <strong>flagged_transactions</strong> as the <strong>name</strong> of the bucket, and specify <strong>high_risk</strong> as the associated <strong>value</strong>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>After providing all the required information in the <strong>ADD FUNCTION</strong> dialog, click <strong>Next</strong>: <strong>Add Code</strong>.
-The <strong>high_risks_transactions</strong> dialog appears.</p>
-<div class="paragraph">
-<p>The <strong>high_risks_transactions</strong> dialog initially contains a placeholder code block.
-You will substitute your actual <strong>high_risks_transactions</strong> code in this block.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/add_functions_code_exp2.png" alt="add functions code exp2" width="400">
-</div>
-</div>
-</li>
-<li>
-<p>Copy the following Function, and paste it in the placeholder code block of the <strong>high_risks_transactions</strong> dialog:</p>
 <div class="listingblock">
 <div class="content">
 <pre>function OnUpdate(doc, meta) {
@@ -235,63 +194,103 @@ function getUser(userId)
 }</pre>
 </div>
 </div>
+<div class="sect2">
+<h3 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h3>
 <div class="paragraph">
-<p>After pasting, the screen appears as displayed below:</p>
+<p>Before you begin, you’ll need to ensure that three buckets, metadata, flagged_transactions and transactions buckets, are created. See <a href="eventing-example-creating-buckets.html" class="page">Creating Buckets</a>.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="procedure"><a class="anchor" href="#procedure"></a>Procedure</h3>
+<div class="paragraph">
+<p>Proceed as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION,to add a new Function. The ADD FUNCTION dialog appears.</p>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, for individual Function elements provide the below information:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>For the Source Bucket drop-down, select the transactions bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>For the Metadata Bucket drop-down, select metadata bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>Enter high_risks_transactions as the name of the Function you are creating in the Function Name text-box.</p>
+</li>
+<li>
+<p>Enter Functions that computes risky transaction and flags them, in the Description text-box.</p>
+</li>
+<li>
+<p>For the Settings option, use the default values.</p>
+</li>
+<li>
+<p>For the Bindings option, add two bindings. For the first binding specify users as the name of the bucket, and specify user as its associated value. For the second binding, specify flagged_transactions as the name of the bucket, and specify high_risk as its associated value.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, click Next: Add Code. The high_risks_transactions dialog appears. The high_risks_transactions dialog initially contains a placeholder code block. You will substitute your actual high_risks_transactions code in this block.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/add_functions_code_exp2.png" alt="add functions code exp2" width="400">
+</div>
+</div>
+</li>
+<li>
+<p>Copy the sample Function handler code, and paste it in the placeholder code block of the high_risks_transactions dialog.</p>
+</li>
+<li>
+<p>After pasting, the screen appears as displayed below:</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/high_risks_transactions_handler_code.png" alt="high risks transactions handler code" width="600">
 </div>
 </div>
-<div class="paragraph">
-<p>The OnUpdate handler is triggered for every transaction.
-The handler checks if the transaction amount is less than the user’s available credit limit.
-When this condition is breached, then this transaction is flagged as a high-risk transaction.
-The Function <em>high_risks_transactions</em> then moves this transaction to a different bucket, <em>flagged_transactions</em> bucket.
-When the transaction is moved to a new bucket, the handler enriches the document with predefined <em>comments</em> and also provides a <em>reason code</em>*.* In the last part, the handler performs a currency validation step.
-If the transaction currency is other than the preconfigured home currency of the user, then the handler flags the transactions and moves it to a different bucket.</p>
-</div>
 </li>
 <li>
-<p>Click <strong>Save</strong>.</p>
+<p>Click Save.</p>
 </li>
 <li>
-<p>To return to the Eventing screen, click <strong>Eventing</strong>.</p>
+<p>To return to the Eventing screen, click Eventing.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/high_risks_transactions_handler_deploy.png" alt="high risks transactions handler deploy" width="400">
 </div>
 </div>
-<div class="paragraph">
-<p>The Function <em>high_risks_transactions</em>is listed as a defined Function.
-Currently, it is listed as <strong>Undeployed</strong> and <strong>Paused</strong>.</p>
-</div>
 </li>
 <li>
-<p>Click <strong>Deploy</strong>.</p>
+<p>The Function high_risks_transactionsis listed as a defined Function.</p>
 </li>
 <li>
-<p>From the <strong>Confirm Deploy Function</strong> dialog, click <strong>Deploy Function</strong>.
-This deploys the Function and displays the main <strong>Eventing</strong> screen.
+<p>Click Deploy.</p>
+</li>
+<li>
+<p>From the Confirm Deploy Function dialog, from the Feed boundary drop-down, select Everything and click Deploy Function.<br>
 From this point, the defined Function is executed on all existing documents and on subsequent mutations.</p>
 </li>
 <li>
-<p>To check results of the deployed Function, after a sufficient time elapse, from the <strong>Couchbase Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>Buckets</strong>.</p>
+<p>To check results of the deployed Function, after a sufficient time elapse, from the Couchbase Web Console&gt; Eventing page, click Buckets.</p>
 </li>
 <li>
-<p>Click <em>flagged_transactions</em> bucket.
-All documents available in this bucket are transactions that are flagged as high-risk transactions.</p>
+<p>Click the flagged_transactions bucket. All documents available in this bucket are transactions that are flagged as high-risk transactions.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/buckets.png" alt="buckets" width="600">
 </div>
 </div>
-<div class="paragraph">
-<p>This indicates that transactions which were flagged as high risk gets moved to the <em>flagged_transactions</em> bucket.</p>
+<div class="literalblock">
+<div class="content">
+<pre>  This indicates that transactions which were flagged as high risk gets moved to the flagged_transactionsbucket.
+. From the Couchbase Web Console &gt; Query page, execute the below N1QL query. The query result displays currency mismatch and high risk transaction amount that was flagged.</pre>
 </div>
-</li>
-<li>
-<p>From the <strong>Couchbase Web Console</strong> &gt; <strong>Query</strong> page, execute the below N1QL query:</p>
+</div>
 <div class="listingblock">
 <div class="content">
 <pre>SELECT reason_code, COUNT(1), num_txns, SUM(amount) amount
@@ -306,6 +305,15 @@ GROUP BY reason_code;</pre>
 </div>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>To summarize, this example illustrated how easy it was to track a high-risk transaction. The handler code was configured in accordance with your business logic to identify and flag risky  transactions.</p>
+</div>
+<div class="paragraph">
+<p>In case your business logic (workflow to assess a high-risk transaction) evolves with time, then you need to modify only the Function handler code. With changes only to the Function handler code, your efforts in application configuration and infrastructure are significantly reduced.</p>
+</div>
+</div>
+</div>
 </div>
 </article>
 </main>
@@ -1934,13 +1942,54 @@ GROUP BY reason_code;</pre>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1950,6 +1999,11 @@ GROUP BY reason_code;</pre>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item is-current-path is-active" data-depth="2">

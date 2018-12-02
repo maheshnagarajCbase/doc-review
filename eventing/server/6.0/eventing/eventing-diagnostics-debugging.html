@@ -110,12 +110,12 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Diagnostics and debugging comprises of logging Functions and the Visual Debugger.</p>
+<p>Diagnostics and debugging comprises of logging Functions and debugging Functions.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="5-1-logging-functions"><a class="anchor" href="#5-1-logging-functions"></a>5.1 Logging Functions</h2>
+<h2 id="logging-functions"><a class="anchor" href="#logging-functions"></a>Logging Functions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>The Eventing Service creates two different types of logs:</p>
@@ -131,22 +131,22 @@
 </ul>
 </div>
 <div class="sect2">
-<h3 id="5-1-1-eventing-logs"><a class="anchor" href="#5-1-1-eventing-logs"></a>5.1.1 Eventing Logs</h3>
+<h3 id="eventing-logs"><a class="anchor" href="#eventing-logs"></a>Eventing Logs</h3>
 <div class="paragraph">
-<p>Eventing Logs, termed also as system logs, captures system errors for the Eventing Service. System errors get logged depending on the level and severity of the reported problem. For every node a separate system log file, eventing.log, gets created.</p>
+<p>Eventing Logs, termed also as system logs, captures system errors for the Eventing Service. System errors get logged depending on the level and severity of the reported problem. For every node a separate system log file, <strong>eventing.log</strong>, gets created.</p>
 </div>
 <div class="paragraph">
-<p>Explicit logging can be performed by means of the Couchbase CLI utility cbcollect_info.</p>
+<p>Explicit logging can be performed by means of the Couchbase CLI utility <strong>cbcollect_info</strong> tool.</p>
 </div>
 <div class="paragraph">
-<p>Eventing logs are similar to other logs. For more information on log file locations, Log Rotation and Log File Listing, refer to {Link} Manage Logging {/Link}</p>
+<p>Eventing logs are similar to other logs. For more information on log file locations, Log Rotation and Log File Listing, refer to <a href="#">clustersetup:ui-logs.adoc</a></p>
 </div>
 <div class="paragraph">
-<p>The eventing.log file contains redactable user data. See {Link} Applying Redaction{/Link}.</p>
+<p>The <strong>eventing.log</strong> file contains redactable user data, see <a href="#">clustersetup:logging.adoc#understanding_redaction</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="5-1-2-application-logs"><a class="anchor" href="#5-1-2-application-logs"></a>5.1.2 Application Logs</h3>
+<h3 id="application-logs"><a class="anchor" href="#application-logs"></a>Application Logs</h3>
 <div class="paragraph">
 <p>In the Eventing Service framework, Application logs capture various Function related activities and errors. Function-related activities such as editing the handler code, modifying feed boundaries conditions, and debugging activities, get recorded in the Application logs.</p>
 </div>
@@ -163,7 +163,7 @@ The cbcollect_info tool does not collect the Application log files.
 </table>
 </div>
 <div class="sect3">
-<h4 id="5-1-2-1-configuring-application-logs"><a class="anchor" href="#5-1-2-1-configuring-application-logs"></a>5.1.2.1 Configuring Application Logs</h4>
+<h4 id="configuring-application-logs"><a class="anchor" href="#configuring-application-logs"></a>Configuring Application Logs</h4>
 <div class="paragraph">
 <p>Unlike System logs, Application logs are user-configurable. You can access an Application log file using the command line interface. Couchbase Server creates different application log files (one for each Function) depending on the level and severity of the reported problem, as configured during the Function definition.</p>
 </div>
@@ -171,7 +171,7 @@ The cbcollect_info tool does not collect the Application log files.
 <p>To configure an Application log, use the REST endpoint settings option.</p>
 </div>
 <div class="paragraph">
-<p>Sample URL</p>
+<p>Sample URL for configuring application logs</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -179,7 +179,7 @@ The cbcollect_info tool does not collect the Application log files.
 </div>
 </div>
 <div class="paragraph">
-<p>Sample Payload</p>
+<p>Sample Payload for configuring application logs</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -197,7 +197,7 @@ The cbcollect_info tool does not collect the Application log files.
 </div>
 </div>
 <div class="sect3">
-<h4 id="5-1-2-2-application-log-file-locations"><a class="anchor" href="#5-1-2-2-application-log-file-locations"></a>5.1.2.2 Application Log File Locations</h4>
+<h4 id="application-log-file-locations"><a class="anchor" href="#application-log-file-locations"></a>Application Log File Locations</h4>
 <div class="paragraph">
 <p>Based on your platform, Couchbase Server stores Application log files in the following locations.</p>
 </div>
@@ -218,7 +218,7 @@ The cbcollect_info tool does not collect the Application log files.
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Windows</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">C:\Program Files\Couchbase\Server\var\lib\couchbase\data\@eventing</p>
-<p class="tableblock">(Assumes default installation location)</p></td>
+<p class="tableblock">(Assumes default installation location.)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Mac OS X</p></td>
@@ -227,16 +227,16 @@ The cbcollect_info tool does not collect the Application log files.
 </tbody>
 </table>
 <div class="paragraph">
-<p><strong>Note</strong>: During Cluster setup, if you have chosen a custom path, then the path for Application logs is same as that of the selected Indexes Path. The @eventing folder in the selected Indexes Path stores the Application logs.</p>
+<p><strong>Note</strong>: During Cluster setup, if you have chosen a custom path, then the path for Application logs is same as that of the selected Indexes Path. The <strong>@eventing</strong> folder in the selected Indexes Path stores the Application logs.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="5-1-2-3-application-log-file-rotations"><a class="anchor" href="#5-1-2-3-application-log-file-rotations"></a>5.1.2.3 Application Log File Rotations</h4>
+<h4 id="application-log-file-rotations"><a class="anchor" href="#application-log-file-rotations"></a>Application Log File Rotations</h4>
 <div class="paragraph">
 <p>By default, the maximum size of an Application log file is 40MB, and the number of log files before rotation is 10. Couchbase Server stores 10 rotations (the current rotation plus nine compressed rotations).</p>
 </div>
 <div class="paragraph">
-<p>For illustration, consider enrich_ip_nums as the name of the Function. A corresponding Application log file, enrich_ip_nums.log, gets created in the Couchbase cluster. Whenever the enrich_ip_nums.log reaches 10MB in size, assuming the maximum size of an Application log file is 10MB and the number of log files before rotation is 10, the system automatically generates the enrich_ip_nums.log.1 file, during its first iteration. The file enrich_ip_nums.log transfers all the log information to this new log file. For this illustration, since the number of log files is 10, the system stores 10 such files, the currently active log file along with 9 truncated files, at any given instance.</p>
+<p>For illustration, consider <strong>enrich_ip_nums</strong> as the name of the Function. A corresponding Application log file, <strong>enrich_ip_nums.log</strong>, gets created in the Couchbase cluster. Whenever the <strong>enrich_ip_nums.log</strong> reaches 10MB in size, assuming the maximum size of an Application log file is 10MB and the number of log files before rotation is 10, the system automatically generates the <strong>enrich_ip_nums.log.1</strong> file, during its first iteration. The file <strong>enrich_ip_nums.log</strong> transfers all the log information to this new log file. For this illustration, since the number of log files is 10, the system stores 10 such files, the currently active log file along with 9 truncated files, at any given instance.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -255,16 +255,16 @@ Log redaction is applicable only for System logs and not for Application logs.
 </div>
 </div>
 <div class="sect1">
-<h2 id="5-2-debugging-functions"><a class="anchor" href="#5-2-debugging-functions"></a>5.2 Debugging Functions</h2>
+<h2 id="debugger"><a class="anchor" href="#debugger"></a>Debugging Functions</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>At times, your Function handler code may contain syntax errors and logical errors.</p>
 </div>
 <div class="paragraph">
-<p>The JavaScript engine flags any syntax errors during the Function deployment step. However, logical errors are a little difficult to diagnose. If your Function handler code contains a logical error, then there will be no log messages, no error notifications, or any indications from where you can start the debug process. At these times the Visual Debugger, available out-of-the-box, is extremely useful.</p>
+<p>The JavaScript engine flags any syntax error during the Function deployment step. However, logical errors are a little difficult to diagnose. If your Function handler code contains a logical error, then there will be no log messages, no error notifications, or any indications from where you can start the debug process. At these times the Visual Debugger, available out-of-the-box, is extremely useful.</p>
 </div>
 <div class="paragraph">
-<p>The Eventing Service in Couchbase Servers contains a native online real-time Javascript Debugger. This Visual Debugger integrates seamlessly with the Google Chrome Debugger engine for running the Javascript code. With Debugger, you can set breakpoints in the JavaScript and step through it using a tool like Chrome.</p>
+<p>The Eventing Service in Couchbase Server contains a native online real-time Javascript Debugger tool. This Visual Debugger tool integrates seamlessly with the Google Chrome Debugger engine. With the Debugger tool, you can set breakpoints in the JavaScript and step through it using a tool like Chrome.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -282,10 +282,10 @@ Important: Debugging is a convenience-feature intended to help during Function d
 <p><strong>Default Debug Port</strong></p>
 </div>
 <div class="paragraph">
-<p>Port 9140 is the default Eventing debug port. To change the default port settings, see Modifying the Debug Port.</p>
+<p>Port 9140 is the default Eventing debug port. To change the default port settings, see <a href="#modify-debug-port">Modifying the Debug Port</a>.</p>
 </div>
 <div class="sect2">
-<h3 id="5-2-1-debugging-workflow"><a class="anchor" href="#5-2-1-debugging-workflow"></a>5.2.1 Debugging Workflow</h3>
+<h3 id="debugging-workflow"><a class="anchor" href="#debugging-workflow"></a>Debugging Workflow</h3>
 <div class="paragraph">
 <p>During a debug session, a single mutation received by the Function is considered and sent to the Debugger. This technique ensures that processing of the other data mutations in the cluster does not get blocked. The Worker in the Debugger pauses to trap the next event-instance, opens an ephemeral TCP port, and generates a Chrome dev-tools URL, with a session cookie that controls the debug worker. All other events are unaffected except the trapped event-instance.</p>
 </div>
@@ -297,7 +297,7 @@ Important: Debugging is a convenience-feature intended to help during Function d
 </div>
 </div>
 <div class="sect2">
-<h3 id="5-2-2-debugging-a-function"><a class="anchor" href="#5-2-2-debugging-a-function"></a>5.2.2 Debugging a Function</h3>
+<h3 id="debugging-a-function"><a class="anchor" href="#debugging-a-function"></a>Debugging a Function</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -346,9 +346,8 @@ Important: Debugging is a convenience-feature intended to help during Function d
 </li>
 </ol>
 </div>
-</div>
-<div class="sect2">
-<h3 id="5-2-3-transpiler-and-source-map"><a class="anchor" href="#5-2-3-transpiler-and-source-map"></a>5.2.3 Transpiler and Source Map</h3>
+<div class="sect3">
+<h4 id="transpiler-and-source-map"><a class="anchor" href="#transpiler-and-source-map"></a>Transpiler and Source Map</h4>
 <div class="paragraph">
 <p>A transpiler accepts source code provided as input from one high-level programming language and produces an equivalent code in another high-level programming language.</p>
 </div>
@@ -363,13 +362,19 @@ Important: Debugging is a convenience-feature intended to help during Function d
 </div>
 <div class="paragraph">
 <p>Upon source map detection, a text confirmation flag gets displayed in the debug window
-(highlighted below).
-&lt;Screenshot&gt;</p>
+(highlighted below).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/debug-sourcemap.png" alt="debug sourcemap" width="600">
+</div>
+</div>
 </div>
 <div class="sect3">
-<h4 id="5-2-4-modifying-the-debug-port"><a class="anchor" href="#5-2-4-modifying-the-debug-port"></a>5.2.4 Modifying the Debug Port</h4>
+<h4 id="modify-debug-port"><a class="anchor" href="#modify-debug-port"></a>Modifying the Debug Port</h4>
 <div class="paragraph">
-<p>By default, the ns_server configures the Eventing Debug on port 9140. Using the static_config file you can modify the default Eventing Debug port.</p>
+<p>By default, the ns_server configures the Eventing Debug on port 9140. Using the<br>
+static_config file you can modify the default Eventing Debug port.</p>
 </div>
 <div class="paragraph">
 <p>To modify the debug port:</p>
@@ -400,7 +405,7 @@ Important: Debugging is a convenience-feature intended to help during Function d
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Note: If no port numbers are not specified, default ports are used. To override some or all default ports, append the user-defined ports to the static_config file file.
+If no port numbers are not specified, default ports are used. To override some or all default ports, append the user-defined ports to the static_config file file.
 </td>
 </tr>
 </table>
@@ -2036,13 +2041,54 @@ Note: If no port numbers are not specified, default ports are used. To override 
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -2052,6 +2098,11 @@ Note: If no port numbers are not specified, default ports are used. To override 
   <li class="nav-item is-current-page is-active" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

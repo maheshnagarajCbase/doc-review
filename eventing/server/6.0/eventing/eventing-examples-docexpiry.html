@@ -108,23 +108,68 @@
   </div>
 <article class="doc">
 <h1 class="page">Document Expiry and Archival</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Goal</strong>: When a document in an existing bucket is about to expire, a new document is created in a newly created bucket.</p>
+<p>This example illustrates how to leverage Timers in the Eventing Service to perform an document archival, upon expiry.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="need-for-document-expiry-and-archival"><a class="anchor" href="#need-for-document-expiry-and-archival"></a>Need for Document Expiry and Archival</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When an existing document is about to expire, there needs to be a way to programatically create a new document before its archival.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="developing-your-handler-code"><a class="anchor" href="#developing-your-handler-code"></a>Developing your Handler Code</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Create a JavaScript Function that contains an OnUpdate handler. The handler listens to data-changes within a specified source bucket. When a document within the source bucket is above to get expired, the handler executes a routine stores the document in the target bucket.</p>
 </div>
 <div class="paragraph">
-<p><strong>Implementation</strong>: Write an OnUpdate handler, which runs whenever a document is created or mutated.
-The handler calls a timer routine, which executes a callback function, two minutes prior to any document’s established expiration.
-This function retrieves a specified value from the document, and stores it in a document of the same name, in a specified target bucket.
-The original document in the source bucket is not changed..</p>
+<p>In this example, the handler calls a timer routine, which executes a callback function, two minutes prior to any document’s established expiration. This function retrieves a specified value from the document, and stores it in a document of the same name, in a specified target bucket. The original document in the source bucket is not changed.</p>
 </div>
-<div class="paragraph">
-<p>For this example, the buckets created such as source, target, and metadata buckets, are used.
-A new document is created within the source bucket, and this document has its expiration — or Time To Live (TTL) — set to occur ten minutes after the document&#8217;s creation.</p>
+<div class="listingblock">
+<div class="content">
+<pre>function OnUpdate(doc, meta) {
+ if (meta.expiration &gt; 0 ) //do only for those documents that have a non-zero TTL
+     {
+       var expiry = new Date(meta.expiration);
+       // Compute 2 minutes from the TTL timestamp
+        var twoMinsPrior = new Date(expiry.setMinutes(expiry.getMinutes()-2));
+        var context = {docID : meta.id};
+        createTimer(DocTimerCallback, twoMinsPrior , meta.id, context);
+        log('Added Doc Timer to DocId:', meta.id);
+      }
+}
+function DocTimerCallback(context)
+     {
+       log('DocTimerCallback Executed for DocId:', String(context.docID));
+       tgt[context.docID] = "To Be Expired Key's Value is:" + JSON.stringify(src[context.docID]);
+       log('Doc Timer Executed for DocId', String(context.docID));
+     }</pre>
 </div>
+</div>
+<div class="sect2">
+<h3 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h3>
 <div class="paragraph">
-<p>Python script for this Example is provided for reference.
-Using the Couchbase SDK, you can create or modify the document expiration.
-In this example, the Couchbase SDK Python client creates a document and sets the document&#8217;s expiration.</p>
+<p>Before you begin, you’ll need to ensure that:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The three buckets, metadata, target and source buckets, are created. See <a href="eventing-example-creating-buckets.html" class="page">Creating Buckets</a>.</p>
+</li>
+<li>
+<p>A new document is created within the source bucket, and this document has its expiration, Time To Live (TTL), set to occur 10 minutes after the document’s creation.</p>
+</li>
+<li>
+<p>Python script for this example is provided for reference. Couchbase SDK supports to creation or modification of the expiration time in a document.</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -141,16 +186,14 @@ cb.touch('SampleDocument2', ttl=10*60)</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The script imports a Couchbase cluster object, and authenticates against it, using (for demonstration purposes) the Full Administrator username and password (the cluster is assumed to be accessible on localhost).
-The script then opens the existing source bucket, and inserts a new document, named <strong>SampleDocument2</strong>, whose body is <strong>{'a_key': 'a_value'}</strong>.</p>
+<p>The script imports a Couchbase cluster object, and authenticates it, using (for demonstration purposes) the Full Administrator username and password (the cluster is assumed to be accessible on localhost). The script then opens the existing source bucket, and inserts a new document, named SampleDocument2, whose body is {'a_key': 'a_value'}.</p>
 </div>
 <div class="paragraph">
-<p>For information on installing the Couchbase Python SDK, refer to <a href="#">java-sdk::start-using-sdk.adoc</a>.
-For information on using the Couchbase Python SDK to establish bucket-expiration, refer to <a href="#">dotnet-sdk::document-operations.adoc</a>.</p>
+<p>For information on installing the Couchbase Python SDK, refer to Start Using the SDK. For information on using the Couchbase Python SDK to establish bucket-expiration, refer to Document Operations.</p>
 </div>
-<div class="paragraph">
-<p><strong>Procedure</strong></p>
 </div>
+<div class="sect2">
+<h3 id="procedure"><a class="anchor" href="#procedure"></a>Procedure</h3>
 <div class="paragraph">
 <p>Proceed as follows:</p>
 </div>
@@ -184,82 +227,48 @@ OperationResult&lt;rc=0x0, key='SampleDocument2', cas=0x1519ec8e686c0000&gt;
 </div>
 </li>
 <li>
-<p>To verify bucket creation, access the <strong>Buckets</strong> screen from the <strong>Couchbase Web Console</strong> and click the <strong>Document</strong> tab of the <strong>Source</strong> bucket.
-The new document gets displayed.</p>
+<p>To verify bucket creation, access the Buckets screen from the Couchbase Web Console and click the Document tab of the Source bucket. The new document gets displayed.</p>
 </li>
 <li>
-<p>[Optional Step] Click on a document&#8217;s id to view the metadata information.</p>
+<p>[Optional Step] Click on a document’s id to view the metadata information.</p>
 </li>
 <li>
-<p>From the <strong>Couchbase Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>ADD FUNCTION</strong>, to add a new Function.
-The <strong>ADD FUNCTION</strong> dialog appears.</p>
+<p>From the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION, to add a new Function. The ADD FUNCTION dialog appears.</p>
 </li>
 <li>
-<p>In the <strong>ADD FUNCTION</strong> dialog, for individual Function elements provide the below information:</p>
-<div class="ulist">
-<ul>
+<p>In the ADD FUNCTION dialog, for individual Function elements, provide the below information:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>For the <strong>Source Bucket</strong> drop-down, select <strong>source</strong>.</p>
+<p>For the Source Bucket drop-down, select the source bucket option that was created for this purpose.</p>
 </li>
 <li>
-<p>For the <strong>Metadata Bucket</strong> drop-down, select <strong>metadata</strong>.</p>
+<p>For the Metadata Bucket drop-down, select the metadata bucket option that was created for this purpose.</p>
 </li>
 <li>
-<p>Enter <strong>add_timer_before_expiry</strong> as the name of the Function you are creating in the <strong>FunctionName</strong> text-box.</p>
+<p>Enter add_timer_before_expiry as the name of the Function you are creating in the FunctionName text-box.</p>
 </li>
 <li>
-<p>Enter text <strong>Function that adds timer before document expiry</strong>, in the <strong>Description</strong> text-box.</p>
+<p>Enter text Function that adds timer before document expiry, in the Description text-box.</p>
 </li>
 <li>
-<p>For the <strong>Settings</strong> option, use the default values.</p>
+<p>For the Settings option, use the default values.</p>
 </li>
 <li>
-<p>For the <strong>Bindings</strong> option, add two bindings.
-For the first binding specify <strong>source</strong> as the name of the bucket, and specify <strong>src</strong> as the associated value.
-For the second binding, specify <strong>target</strong> as the name of the bucket, and specify <strong>tgt</strong> as the associated value.</p>
+<p>For the Bindings option, add two bindings. For the first binding specify source as the name of the bucket, and specify src as its associated value. For the second binding, specify target as the name of the bucket, and specify tgt as the associated value.</p>
 </li>
-</ul>
+</ol>
 </div>
 </li>
 <li>
-<p>After providing all the required information in the <strong>ADD FUNCTION</strong> dialog, click <strong>Next: Add Code</strong>.
-The <strong>add_timer_before_expiry</strong> dialog appears.</p>
+<p>After providing all the required information in the ADD FUNCTION dialog, click Next: Add Code. The add_timer_before_expiry dialog appears.<br>
+The add_timer_before_expiry dialog initially contains a placeholder code block. You will substitute your actual add_timer_before_expiry code in this block.</p>
 </li>
 <li>
-<p>The <strong>add_timer_before_expiry</strong> dialog initially contains a placeholder code block.
-You will substitute your actual <strong>add_timer_before_expiry code</strong> in this block.</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/casacade_del_withcode.png" alt="casacade del withcode" width="600">
-</div>
-</div>
+<p>Copy the sample Function handler code, and paste it in the placeholder code block of add_timer_before_expiry dialog.</p>
 </li>
 <li>
-<p>Copy the following Function, and paste it in the placeholder code block of <strong>add_timer_before_expiry</strong> dialog.</p>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta) {
- if (meta.expiration &gt; 0 ) //do only for those documents that have a non-zero TTL
-     {
-       var expiry = new Date(meta.expiration);
-       // Compute 2 minutes from the TTL timestamp
-        var twoMinsPrior = new Date(expiry.setMinutes(expiry.getMinutes()-2));
-        var context = {docID : meta.id};
-        createTimer(DocTimerCallback, twoMinsPrior , meta.id, context);
-        log('Added Doc Timer to DocId:', meta.id);
-      }
-}
-function DocTimerCallback(context)
-     {
-       log('DocTimerCallback Executed for DocId:', String(context.docID));
-       tgt[context.docID] = "To Be Expired Key's Value is:" + JSON.stringify(src[context.docID]);
-       log('Doc Timer Executed for DocId', String(context.docID));
-     }</pre>
-</div>
-</div>
-<div class="paragraph">
 <p>After pasting, the screen appears as displayed below:</p>
-</div>
 <div class="imageblock">
 <div class="content">
 <img src="_images/casacade_del_withcode.png" alt="casacade del withcode" width="600">
@@ -267,31 +276,35 @@ function DocTimerCallback(context)
 </div>
 </li>
 <li>
-<p>Click <strong>Save</strong>.</p>
+<p>Click Save.</p>
 </li>
 <li>
-<p>To return to the Eventing screen, click <strong>Eventing</strong> tab.</p>
+<p>To return to the Eventing screen, click Eventing tab.</p>
 </li>
 <li>
-<p>From the <strong>Eventing</strong> screen, click <strong>Deploy</strong>.</p>
+<p>From the Eventing screen, click Deploy.</p>
 </li>
 <li>
-<p>In the <strong>Confirm Deploy Function</strong> dialog, select <strong>Everything from the Feed boundary</strong> option.</p>
+<p>In the Confirm Deploy Function dialog, select Everything from the Feed boundary option.</p>
 </li>
 <li>
-<p>Click <strong>Deploy</strong>.
-The function is deployed and starts running within a few seconds.</p>
+<p>Click Deploy. The function is deployed and starts running within a few seconds.</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/cascade_delete_buckets.png" alt="cascade delete buckets" width="600">
 </div>
 </div>
-<div class="paragraph">
-<p>As a result, a new document — like the original, named <strong>SourceDocument2</strong> — is created, with a value based on that of the original.
-After two minutes has elapsed, check the documents within the source bucket: the original <strong>SourceDocument2</strong> is no longer visible, having been removed at its defined expiration-time.</p>
-</div>
+</li>
+<li>
+<p>As a result, a new document — like the original, named SourceDocument2 — is created, with a value based on that of the original. After two minutes, check the documents within the source bucket: the original SourceDocument2 is no longer visible, having been removed at its defined expiration-time.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>To summarize, using the timer construct, this example illustrated an easy way to move a document before its configured expiration time. Also, we used the Couchbase SDK Python client to insert the expiry time attribute to a document in the cluster.</p>
+</div>
+</div>
+</div>
 </div>
 </article>
 </main>
@@ -1920,13 +1933,54 @@ After two minutes has elapsed, check the documents within the source bucket: the
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1936,6 +1990,11 @@ After two minutes has elapsed, check the documents within the source bucket: the
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item is-current-path is-active" data-depth="2">

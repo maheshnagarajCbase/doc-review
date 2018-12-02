@@ -108,75 +108,30 @@
   </div>
 <article class="doc">
 <h1 class="page">Cascade Delete</h1>
+<div id="preamble">
+<div class="sectionbody">
 <div class="paragraph">
-<p><strong>Goal</strong>: This example illustrates how to leverage the Eventing Service to perform a cascade delete operation.
-When a user is deleted, Couchbase Functions provide a reliable method to delete all the associated documents with the deleted user.</p>
+<p>This example illustrates how to leverage the Eventing Service to perform a cascade delete operation.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="need-for-cascade-delete-operation"><a class="anchor" href="#need-for-cascade-delete-operation"></a>Need for Cascade Delete Operation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Couchbase is a NoSQL data platform and therefore does not provide referential integrity. When a user gets deleted, the data platform should provide a reliable method to delete all dependent transactions and documents of the user.</p>
+</div>
+<div class="sect2">
+<h3 id="developing-your-handler-code"><a class="anchor" href="#developing-your-handler-code"></a>Developing your Handler Code</h3>
+<div class="paragraph">
+<p>Create a JavaScript Function that contains an OnDelete handler. The handler listens to data-changes within a specified source bucket, the users bucket. When a user within the source bucket gets deleted, the handler executes a routine to remove the deleted user.</p>
 </div>
 <div class="paragraph">
-<p>This example requires you to create three buckets: users, metadata and transactions buckets.</p>
+<p>In this example, the handler executes the routine when a delete operation is performed. The handler then uses a N1QL query to fetch all associated documents/transactions of this user. All the fetched documents are removed from the cluster. The handler then records the delete operation in a Function-specific application log file.</p>
 </div>
 <div class="paragraph">
-<p>For steps to create buckets, see <a href="../manage/manage-buckets/create-bucket.html" class="page">Create a Bucket</a>.</p>
+<p>A sample handler code for cascade delete is provided.</p>
 </div>
-<div class="paragraph">
-<p><strong>Implementation</strong>: Create a JavaScript Function that contains an <strong>OnDelete</strong> handler.
-The handler listens to data-changes within a specified, <strong>users</strong> source bucket.
-When a user within the source bucket gets deleted, the handler executes a routine to remove the deleted user.
-When the delete operation is complete, all associated documents of the delete users get removed.</p>
-</div>
-<div class="paragraph">
-<p>Proceed as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>From the <strong>Couchbase Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>ADD FUNCTION</strong>,to add a new Function.</p>
-<div class="imageblock">
-<div class="content">
-<img src="_images/functions_add_4exp3.png" alt="functions add 4exp3" width="400">
-</div>
-</div>
-</li>
-<li>
-<p>In the <strong>ADD FUNCTION</strong> dialog, for individual Function elements, provide the below information:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>For the <strong>Source Bucket</strong> drop-down, select the <strong>Users</strong> that was created for this purpose.</p>
-</li>
-<li>
-<p>For the <strong>Metadata Bucket</strong> drop-down, select the <strong>metadata</strong> that was created for this purpose.</p>
-</li>
-<li>
-<p>Enter <strong>delete_orphaned_txns</strong> as the name of the Function you are creating in the <strong>Function</strong>*Name* text-box.</p>
-</li>
-<li>
-<p>Enter <strong>Delete Orphaned Transactions from the `transactions’ bucket when user_id is less than 10</strong> in the <strong>Description</strong> text-box.</p>
-</li>
-<li>
-<p>For the <strong>Settings</strong> option, use the default values.</p>
-</li>
-<li>
-<p>For the <strong>Bindings</strong> option, specify <strong>users</strong> as the <strong>name</strong> of the bucket and specify <strong>src</strong>_<strong>user</strong> as the associated <strong>value</strong>.</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>After providing all the required information in the <strong>ADD FUNCTION</strong> dialog, click <strong>Next</strong>: <strong>Add Code</strong>.
-The <strong>delete_orphaned_txns</strong> dialog appears.</p>
-<div class="paragraph">
-<p>The <strong>delete_orphaned_txns</strong> dialog initially contains a placeholder code block.
-You will substitute your actual <strong>delete_orphaned_txns</strong> code in this block.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/addfunctions-code_exp3.png" alt="addfunctions code exp3" width="400">
-</div>
-</div>
-</li>
-<li>
-<p>Copy the following Function, and paste it in the placeholder code block of the <strong>delete_orphaned_txns</strong> screen:</p>
 <div class="listingblock">
 <div class="content">
 <pre>function OnUpdate(doc, meta) {
@@ -190,8 +145,7 @@ function OnDelete(meta) {
        try
        {
             var this_user_id = meta.id;
-            var del = delete from `transactions` where user_id = TONUMBER($this_user_id);
-            del.execQuery();
+            delete from `transactions` where user_id = TONUMBER($this_user_id);
             log('Deleted Orphaned Transactions for User:', this_user_id);
        }
        catch(e)
@@ -202,37 +156,73 @@ function OnDelete(meta) {
 }</pre>
 </div>
 </div>
-<div class="paragraph">
-<p>After pasting, the screen appears as displayed below:</p>
 </div>
+<div class="sect2">
+<h3 id="prerequisites"><a class="anchor" href="#prerequisites"></a>Prerequisites</h3>
+<div class="paragraph">
+<p>Before you begin, you’ll need to ensure that two buckets, metadata and users buckets, are created. See <a href="eventing-example-creating-buckets.html" class="page">Creating Buckets</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="procedure"><a class="anchor" href="#procedure"></a>Procedure</h4>
+<div class="paragraph">
+<p>Proceed as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>From the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION, to add a new Function.</p>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, for individual Function elements, provide the below information:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>For the Source Bucket drop-down, select the Users bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>For the Metadata Bucket drop-down, select the metadata bucket option that was created for this purpose.</p>
+</li>
+<li>
+<p>Enter delete_orphaned_txns as the name of the Function you are creating in the Function Name text-box.</p>
+</li>
+<li>
+<p>Enter Delete Orphaned Transactions from the `transactions’ bucket when user_id is less than 10 in the Description text-box.</p>
+</li>
+<li>
+<p>For the Settings option, use the default values.</p>
+</li>
+<li>
+<p>For the Bindings option, specify users as the name of the bucket and specify src_user as its associated value.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, click Next: Add Code. The delete_orphaned_txns dialog appears. The delete_orphaned_txns dialog initially contains a placeholder code block. You will substitute your actual delete_orphaned_txns code in this block.</p>
+</li>
+<li>
+<p>Copy the sample Function handler code, and paste it in the placeholder code block of the delete_orphaned_txns screen:</p>
+</li>
+<li>
+<p>After pasting, the screen appears as displayed below:</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/ondelete-functions.png" alt="ondelete functions" width="600">
 </div>
 </div>
-<div class="paragraph">
-<p>The <strong>OnDelete</strong> handler is triggered for user delete transaction.
-The handler checks if the <strong>user_id</strong> is less than 10.
-When this condition is fulfilled, then an N1QL query is triggered to delete all user related information.
-The handler is then configured to record this delete operation in a Function specific application log file.
-.</p>
-</div>
 </li>
 <li>
-<p>To return to the Eventing screen, click <strong>Eventing</strong>.
-The Function <strong>delete_orphaned_txns</strong> is listed as a defined Function.
-Currently, it is listed as <strong>Undeployed</strong> and <strong>Paused</strong>.</p>
+<p>To return to the Eventing screen, click Eventing. The Function delete_orphaned_txns is listed as a defined Function.</p>
 </li>
 <li>
-<p>Click <strong>Deploy</strong>.</p>
+<p>Click Deploy.</p>
 </li>
 <li>
-<p>From the <strong>Confirm Deploy Function</strong> dialog, click <strong>Deploy Function</strong>.
+<p>In the Confirm Deploy Function dialog, from the Feed boundary drop-down, select Everything and click Deploy Function.<br>
 From this point, the defined Function is executed on all existing documents and on subsequent mutations.</p>
 </li>
 <li>
-<p>Navigate to the <strong>Couchbase Web Console</strong> &gt; <strong>Query</strong> page.
-Before deleting a user, a snapshot of <strong>Query Result</strong> from the <strong>users</strong> bucket is displayed:</p>
+<p>Navigate to the Couchbase Web Console &gt; Query page. Before deleting a user, a snapshot of Query Resultfrom the users bucket is displayed for reference:</p>
 <div class="imageblock">
 <div class="content">
 <img src="_images/queryresults_ondelerte.png" alt="queryresults ondelerte" width="400">
@@ -240,24 +230,23 @@ Before deleting a user, a snapshot of <strong>Query Result</strong> from the <st
 </div>
 </li>
 <li>
-<p>The <strong>Query Results</strong> display users with <strong>user_id</strong>s from 1 to 10.</p>
+<p>The Query Results display users with user_ids from 1 to 10.</p>
 </li>
 <li>
-<p>Navigate to the <strong>Couchbase Web Console</strong> &gt; <strong>Buckets</strong> page.
-Delete two users from the <strong>Users</strong> bucket:</p>
-<div class="ulist">
-<ul>
+<p>Navigate to the Couchbase Web Console &gt; Buckets page. Delete two users from the Users bucket:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>Select <strong>User4</strong> from the list and click the <strong>delete</strong> icon.</p>
+<p>Select User4 from the list and click the delete icon.</p>
 </li>
 <li>
-<p>Select <strong>User10</strong> from the list and click the <strong>delete</strong> icon.</p>
+<p>Select User10 from the list and click the delete icon.</p>
 </li>
-</ul>
+</ol>
 </div>
 </li>
 <li>
-<p>From the <strong>Query Editor</strong>, execute an N1QL query to check that all related records for the deleted users are removed from the cluster.</p>
+<p>From the Query Editor, execute an N1QL query to check that all related records for the deleted users are removed from the cluster.</p>
 <div class="listingblock">
 <div class="content">
 <pre>SELECT user_id, COUNT(1) FROM `Users` GROUP BY user_id ORDER BY user_id ASC;</pre>
@@ -270,9 +259,16 @@ Delete two users from the <strong>Users</strong> bucket:</p>
 </div>
 </li>
 <li>
-<p>In the <strong>Query Results</strong> pane notice that user_ids, <strong>user_id4</strong> and <strong>user_id 10</strong> are removed as part of the cascade user delete operation.</p>
+<p>In the Query Results pane notice that user_ids, user_id4 and user_id 10 are removed as part of the cascade user delete operation.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>To summarize, since Eventing Service is a homegrown offering, we uses N1QL queries in the Function handler code. The transpiler in Couchbase Server converted the N1QL query to a code that the JavaScript engine understands, and thereby made the cascade delete operation look easy.</p>
+</div>
+</div>
+</div>
+</div>
 </div>
 </article>
 </main>
@@ -1901,13 +1897,54 @@ Delete two users from the <strong>Users</strong> bucket:</p>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -1917,6 +1954,11 @@ Delete two users from the <strong>Users</strong> bucket:</p>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item is-current-path is-active" data-depth="2">

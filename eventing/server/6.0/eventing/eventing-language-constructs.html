@@ -95,6 +95,8 @@
 <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="../introduction/intro.html">Couchbase Server</a></li>
+    <li class="crumb"><a href="eventing-overview.html">Handle Events</a></li>
+    <li class="crumb"><a href="eventing-functions.html">Couchbase Functions</a></li>
     <li class="crumb"><a href="eventing-language-constructs.html">Language Constructs</a></li>
   </ul>
 </nav>
@@ -108,25 +110,37 @@
 <h1 class="page">Language Constructs</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="quoteblock abstract">
-<blockquote>
-The language constructs are fundamental units of a language.
-This topic discusses the JavaScript constructs that have been removed and new constructs that have been added in order to support the requirements of Couchbase Functions.
-</blockquote>
+<div class="paragraph">
+<p>Language constructs are fundamental units of a language. Javascript is the language to be used while creating Functions. Using Google v8 as the execution container, Couchbase Functions inherit support for most ECMAScript language constructs.</p>
 </div>
 <div class="paragraph">
-<p>Using JavaScript, you can write your custom Functions.
-Couchbase Functions inherit support for most ECMAScript constructs by using Google v8 as the execution container.
-However, to support the ability to shard and scale Function-execution automatically, some capabilities have been removed.
-Additionally, to optimize language-utilization of the server environment, some new constructs have been added.</p>
+<p>To support Couchbase Functions requirement, three new constructs are added and three of the existing JavaScript constructs are removed.</p>
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="removed-lang-features"><a class="anchor" href="#removed-lang-features"></a>Removed Language Features</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="added-language-constructs"><a class="anchor" href="#added-language-constructs"></a>Added Language Constructs</h3>
 <div class="paragraph">
-<p>The following JavaScript features have been removed:</p>
+<p>Following constructs have been added.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="eventing-supportedops.html#bucket-accessors" class="page">Bucket Accessors</a></p>
+</li>
+<li>
+<p><a href="eventing-supportedops.html#n1ql" class="page">N1QL</a></p>
+</li>
+<li>
+<p><a href="eventing-supportedops.html#timers-lan-con" class="page">Timers</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="removed-language-constructs"><a class="anchor" href="#removed-language-constructs"></a>Removed Language Constructs</h3>
+<div class="paragraph">
+<p>Following constructs have been removed.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -141,379 +155,56 @@ Additionally, to optimize language-utilization of the server environment, some n
 </li>
 </ul>
 </div>
+<div class="sect3">
+<h4 id="globalstate"><a class="anchor" href="#globalstate"></a>Global State</h4>
 <div class="paragraph">
-<p><em>Global State</em>:</p>
+<p>Functions do not allow global variables.</p>
 </div>
 <div class="paragraph">
-<p>Functions do not allow global variables.
-All state must be saved and retrieved from persistence providers.
-In Couchbase Server, the Data Service provider is used as a persistence provider.
-Therefore, all global states are contained in the Data Service bucket(s) made available to the Function through bindings.
-This restriction is mandatory for the Function-logic to remain agnostic of the rebalance operation.</p>
+<p>All states must be saved and retrieved from the persistence providers. In the Couchbase Data Platform, the data service is used as the persistence provider. Data Service bucket(s) stores all the global states information. Using the bindings entity, Functions can access these global states.</p>
+</div>
+<div class="paragraph">
+<p>For the Function-logic to remain agnostic of the rebalance operation, this restriction on usage of global variables is mandatory.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">var count = 0;                         // Not allowed - global variable.
-function OnUpdate(doc, meta) {
+<pre>var count = 0;        // This is a global variable and is not supported.
+
+function OnUpdate(doc, meta)
+{
   count++;
-}</code></pre>
+}</pre>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="asynchrony"><a class="anchor" href="#asynchrony"></a>Asynchrony</h4>
+<div class="paragraph">
+<p>Access to parent scope is mandatory for Asynchrony, particularly asynchronous callback. Access to parent scope results in a node-specific, long-running state that prevents the capture of entire long-running state in the persistence providers. With this, the Function handlers become short-running, straight-line code, without sleep and wakeups. For this reason the asynchronous callback constructs are not supported.</p>
 </div>
 <div class="paragraph">
-<p><em>Asynchrony</em>:</p>
-</div>
-<div class="paragraph">
-<p>Asynchrony, particularly asynchronous callback, to be Functional needs to retain access to parent scope.
-This forms a node-specific, long-running state that prevents the capture of entire long-running state in persistence providers.
-Therefore, Function handlers are restricted to running as short-running, straight-line code, without sleep and wakeups.
-Limited asynchrony is added back through time observers.
-Time observers are designed not to make the state node-specific</p>
+<p>Limited asynchrony is added back through time observers. Time observers can be configured not to make the state node-specific.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnUpdate(doc, meta) {
-  setTimeout(function(){}, 300);     // Not allowed - asynchronous flow.
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><em>Browser and other Extensions</em>:</p>
-</div>
-<div class="paragraph">
-<p> .A Function executes on Couchbase Server similar to the code that is visible in the browser.</p>
-</div>
-<div class="paragraph">
-<p>As a Developer, you need to understand that the code displayed in the below example runs in the browser.
-The ‘window’ term in the code <strong>window.XMLHttpRequest()</strong>, is not a server-side construct but is in the context of a browser.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnUpdate(doc, meta) {
-  var rpc = window.XMLHttpRequest();  // Not allowed - browser extension.
-}</code></pre>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="added-lang-features"><a class="anchor" href="#added-lang-features"></a>Added Language Features</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The following constructs have been added:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Bucket Accessors</p>
-</li>
-<li>
-<p>Top level N1QL keywords such as SELECT, UPDATE, and INSERT</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><em>Bucket Accessors</em>:</p>
-</div>
-<div class="paragraph">
-<p>Couchbase buckets, when bound to a Function, appear as a global JavaScript map.
-The map operations such as get, set and delete are mapped to the Data Service providers get, set, and delete operations respectively.
-Other advanced Data Service operations are available as member Functions on the map object.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnUpdate(doc, meta) {
-  // Assuming 'dest' is a bucket alias binding
-  var val = dest[meta.id];         // this is a bucket GET operation.
-  dest[meta.id] = {"status":3};    // this is a bucket SET operation.
-  delete dest[meta.id];            // this is a bucket DEL operation.
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><em>N1QL</em>:</p>
-</div>
-<div class="paragraph">
-<p>Top level N1QL keywords, such as SELECT, UPDATE, and INSERT, are available as keywords in Functions.
-Operations that return values are accessible through a special iterator on which the <strong>for (var &lt;row&gt; of &lt;iterator&gt;)</strong> looping-construct has been defined.
-This restricted looping-construct allows support of query-result streaming, and automatic query-cancellation when the iterator goes out of scope.
-Any variable that is reachable from the scope of the N1QL query can be referred to using <strong>$&lt;variable&gt;</strong> syntax in the N1QL statement, where parameters get substituted according to the rules of the named-parameter substitution in the N1QL grammar specification.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-The N1QL construct is still in development and may have some rough edges and bugs, and may change significantly before the final GA release.
-This version of Couchbase Server is intended for development purposes only.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The iterator is an input iterator (elements are read-only).
-The keyword <em>this</em> cannot be used in the body of the iterator.
-The variables created inside the iterator are local to the iterator.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnUpdate(doc, meta) {
-  var strong = 70;
-  var stmt =
-    SELECT *                  // N1QL queries are embedded directly.
-    FROM `beer-samples`       // Token escaping is standard N1QL style.
-    WHERE abv &gt; $strong;      // Local variable reference using $ syntax.
-  for (var beer of stmt) {  // Stream results using 'for' iterator.
-    break;                   // Cancel streaming query by breaking out.
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Function handler code supports N1QL queries.
-Top level N1QL keywords, such as SELECT, UPDATE, and INSERT, are available as keywords in Functions.</p>
-</div>
-<div class="paragraph">
-<p>During deployment, if a handler code includes an N1QL query, then the system generates a warning message.
-<code class="out">Warning Message: "Handler &lt;function_name&gt; uses Beta features.
-Do not use in production environments."</code>However, the warning message does not prevent the Function deployment.</p>
-</div>
-<div class="paragraph">
-<p>You must use <code class="var">$&lt;variable&gt;</code>, as per N1QL specification, to use a JavaScript variable in the query statement.
-The object expressions for substitution are not supported and therefore you cannot use the <code class="param">meta.id</code> expression in the query statement.</p>
-</div>
-<div class="paragraph">
-<p>Instead of <code class="param">meta.id</code> expression, you can use <code>var id = meta.id</code> in an N1QL query.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Invalid N1QL query</p>
-<div class="listingblock">
-<div class="content">
-<pre>DELETE FROM `transactions` WHERE username = $meta.id;</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Valid N1QL query</p>
-<div class="listingblock">
-<div class="content">
-<pre>var id = meta.id;
-DELETE FROM `transactions` WHERE username = $id;</pre>
-</div>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>When you use a N1QL query inside a Function handler, remember to use an escaped identifier for bucket names with special characters (<code>[.var]`bucket-name`</code>).
-Escaped identifiers are surrounded by backticks and support all identifiers in JSON</p>
-</div>
-<div class="paragraph">
-<p>For example:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If the bucket name is <code class="param">beer-sample</code>, then use the N1QL query such as:</p>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM `beer-sample` WHERE type...</pre>
-</div>
-</div>
-</li>
-<li>
-<p>If bucket name is <code class="param">beersample</code>, then use the N1QL query such as:</p>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM beersample WHERE type ...</pre>
-</div>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="handler-signatures"><a class="anchor" href="#handler-signatures"></a>Handler Signatures</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The Eventing Service supports two event-handlers:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>OnUpdate Handler</p>
-</li>
-<li>
-<p>OnDelete Handler</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><em>OnUpdate Handler</em>: This handler gets called when a document is created or modified.
-The handler listens to data changes from the associated source vBucket.
-A sample OnUpdate handler is displayed below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnUpdate(doc, meta) {
-  if (doc.type === 'order' &amp;&amp; doc.value &gt; 5000) {
-    //‘phonverify’ is a bucket alias that is specified as a binding.
-    phoneverify[meta.id] = doc.customer;
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this handler following limitations exist:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>If a document is modified several times in a short duration, the calls at times get coalesced into a single event, due to deduplication.</p>
-</li>
-<li>
-<p>It is not possible to distinguish a Create from an Update operation.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><em>OnDelete Handler</em>:</p>
-</div>
-<div class="paragraph">
-<p>This handler gets called when a document is deleted.
-The handler listens to data changes from the associated source vBucket.
-This handler also gets invoked during the expiry of a document.</p>
-</div>
-<div class="paragraph">
-<p>A sample OnDelete handler is displayed below:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function OnDelete(meta) {
-  var stmt = SELECT id from orders WHERE shipaddr = $meta.id;
-    for (var id of stmt) {
-      log("Address invalidated for pending order: " + id);
-    }
-  }</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In this handler the following limitations exist:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>It is not possible to distinguish a delete as a result of expiration from a user-triggered delete operation.</p>
-</li>
-<li>
-<p>It is not possible to get the value of the document that was just deleted or the one that just got expired.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="reserved-words"><a class="anchor" href="#reserved-words"></a>Reserved Words</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Reserved words are words that cannot be used as a variable name, function name, or as a property in the Function handler code.
-The following table lists the reserved words that you must refrain from using as they are used by Couchbase&#8217;s query language, N1QL.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="4">N1QL Keywords</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ALTER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EXECUTE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MERGE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UPDATE</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BUILD</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EXPLAIN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PREPARE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UPSERT</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CREATE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GRANT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">RENAME</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DELETE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INFER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">REVOKE</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DROP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INSERT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SELECT</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p><strong>What Happens If You Use a Reserved Word?</strong></p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s say you try to create a new Function handler code using a reserved word for variable names, for function names, and as a property bindings value.
-All three cases generate a deployment error.</p>
-</div>
-<div class="paragraph">
-<p>Reserved words as a variable name:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function get_numip_first_3_octets(ip)
+<pre>function OnUpdate(doc, meta)
 {
-  var grant = 0;
-  if (ip)
-  {
-	var parts = ip.split('.');
-  }
-}</code></pre>
+  setTimeout(function(){}, 300); //synchronous flows are supported.
+}</pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="browser"><a class="anchor" href="#browser"></a>Browser and Other Extensions</h4>
 <div class="paragraph">
-<p>Reserved words as a function name:</p>
+<p>A Function executes on Couchbase Server similar to the code that is visible in the browser. As a developer, you need to understand that the code displayed in the below example runs in the browser. The ‘window’ term in the code <strong>‘window.XMLHttpRequest()’</strong>, is not a server-side construct but is in the context of a browser.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function grant(ip)
+<pre>function OnUpdate(doc, meta)
 {
-  var return_val = 0;
-  if (ip)
-  {
-    var parts = ip.split('.');
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>During the Function deployment step, when the system validates the handler code, it displays an error message such as the following: <code class="out">Sample Error Message - Deployment failed: Syntax error (&lt;line and column numbers&gt;) - grant is a reserved name in N1QLJs</code></p>
-</div>
-<div class="paragraph">
-<p>Reserved words as a property bindings value</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="_images/reserved-words.png" alt="reserved words" width="300">
+  var rpc = window.XMLHttpRequest(); // Browser extension are not supported.
+}</pre>
 </div>
 </div>
 </div>
@@ -1557,7 +1248,7 @@ All three cases generate a deployment error.</p>
   </li>
 </ul>
   </li>
-  <li class="nav-item is-active" data-depth="0">
+  <li class="nav-item is-current-path is-active" data-depth="0">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <span class="nav-text">Develop</span>
@@ -2137,7 +1828,7 @@ All three cases generate a deployment error.</p>
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-path is-active" data-depth="1">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-overview.html">Handle Events</a>
@@ -2145,13 +1836,54 @@ All three cases generate a deployment error.</p>
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
+    </span>
+  </li>
+  <li class="nav-item is-current-path is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page is-active" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -2161,6 +1893,11 @@ All three cases generate a deployment error.</p>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adopting the Eventing Service in your Organization | Couchbase Docs (Local)</title>
+    <title>Adopting the Eventing Service | Couchbase Docs (Local)</title>
     <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-adopting-eventing-service.html">
     <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
     <meta name="dcterms.subject" content="server">
@@ -106,7 +106,7 @@
 </div>
   </div>
 <article class="doc">
-<h1 class="page">Adopting the Eventing Service in your Organization</h1>
+<h1 class="page">Adopting the Eventing Service</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
@@ -115,65 +115,53 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-1-existing-couchbase-customers"><a class="anchor" href="#4-1-existing-couchbase-customers"></a>4.1 Existing Couchbase Customers</h2>
+<h2 id="existing-couchbase-customers"><a class="anchor" href="#existing-couchbase-customers"></a>Existing Couchbase Customers</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As an existing Couchbase Customer, if you are using the Couchbase Data Platform offering, then Eventing Service will be a good fit for managing  all your data mutations. Eventing Service integrates seamlessly with your existing Couchbase nodes such as the Query, GSI, and FTS nodes. You can add a new Eventing node and start tracking data mutations. Adding a new Eventing node is simple and a repeatable process.</p>
+<p>As a Couchbase customer, the Eventing Service is a good fit for managing all your needs on a single data platform. The Eventing Service integrates seamlessly with your existing Couchbase nodes (FTS, GSI, Query services), and with the Eventing Service you can now manage data mutations. Adding a new Eventing node is simple and a repeatable process.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-2-no-additional-license"><a class="anchor" href="#4-2-no-additional-license"></a>4.2 No Additional License</h2>
+<h2 id="workload-isolation"><a class="anchor" href="#workload-isolation"></a>Workload Isolation</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Apart from the Couchbase Server license, you do not need any third-party licenses to track data mutations.</p>
+<p>On a cluster, an Eventing node can run long-side with your existing nodes.  An Eventing node runs independently and does not affect the system performance parameters of other Couchbase nodes.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-3-supported-release-version"><a class="anchor" href="#4-3-supported-release-version"></a>4.3 Supported Release Version</h2>
+<h2 id="no-additional-license"><a class="anchor" href="#no-additional-license"></a>No Additional License</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To use the Eventing Service, you need to be on Couchbase Server 5.0 GA version or higher.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-If your cluster node runs on other release versions prior to Couchbase Server 5.0 GA, for using the Eventing Service refer to the XDCR section {link}.
-</td>
-</tr>
-</table>
+<p>For adopting the Eventing Service, apart from the Couchbase Server, you do not need any third-party license.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-4-data-sets"><a class="anchor" href="#4-4-data-sets"></a>4.4 Data-sets</h2>
+<h2 id="comparing-event-based-architecture-over-polling-and-message-queue-based-systems"><a class="anchor" href="#comparing-event-based-architecture-over-polling-and-message-queue-based-systems"></a>Comparing Event Based Architecture over Polling and Message Queue Based Systems</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Eventing Service, irrespective of the type , works well with different type of data-sets.</p>
-</div>
-<div class="paragraph">
-<p>As an example, your data-set can be credit card transactions from a financial domain, diagnostic vitals from a healthcare domain, ticketing details from an airline, or can be related to purchase order tracking information from an inventory-warehouse domain, the Eventing Service is robust and comfortably handle these data-sets. As an added advantage, Couchbase Functions offer an easy way to perform data enrichment on the existing data-sets. For more information on data enrichment, see the Example section {link}.</p>
+<p><a href="eventing-comparing-with-peer.html" class="page">Comparing Eventing Service</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-5-comparing-event-based-architecture-over-polling-and-message-queue-based-systems"><a class="anchor" href="#4-5-comparing-event-based-architecture-over-polling-and-message-queue-based-systems"></a>4.5 Comparing Event Based Architecture over Polling and Message Queue Based Systems</h2>
+<h2 id="data-sets"><a class="anchor" href="#data-sets"></a>Data-sets</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="#">eventing-comparing-with peer.adoc</a>.</p>
+<p>The Eventing Service works well with different type of data-sets.</p>
+</div>
+<div class="paragraph">
+<p>As an example, your data-set can consist of credit card transactions from a financial domain, diagnostic vitals from a healthcare domain, ticketing details from an airline, or can be related to purchase order tracking information from an inventory-warehouse domain, the Eventing Service is built in a robust way to handle these data-sets. As an added advantage, on existing data-sets, Couchbase Functions offer an easy way to perform data enrichment. For more information on data enrichment, see the Example section {link}.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-6-streamlining-business-logic-changes"><a class="anchor" href="#4-6-streamlining-business-logic-changes"></a>4.6 Streamlining Business Logic Changes</h2>
+<h2 id="streamlining-business-logic-changes"><a class="anchor" href="#streamlining-business-logic-changes"></a>Streamlining Business Logic Changes</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>In the earlier Polling or Message Queue implementation, your business workflows were deeply buried and required modifications to the infrastructure and configuration modules. To accommodate a small business workflow change, multiple code-modules had to undergo development iterations.</p>
+<p>In earlier Polling or Message Queue implementations, business logics were deeply buried and required modifications to the infrastructure and configuration modules. To accommodate a small business logic change, multiple code-modules had to undergo development iterations.</p>
 </div>
 <div class="paragraph">
 <p>Leveraging on the Javascript programming language, Couchbase Functions offer an easy way to handle business workflow changes. Post Eventing Service adoption, if your business workflow undergoes modification, then you need to change only your Function handler code. With shorter development cycles, application developers can focus on building quality code and don’t have to worry about infrastructure or configuration related changes.</p>
@@ -181,46 +169,35 @@ If your cluster node runs on other release versions prior to Couchbase Server 5.
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-7-workload-isolation"><a class="anchor" href="#4-7-workload-isolation"></a>4.7 Workload Isolation</h2>
+<h2 id="testing-with-different-workloads"><a class="anchor" href="#testing-with-different-workloads"></a>Testing with Different Workloads</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>On a cluster, an Eventing node can run long-side with your existing nodes.  An Eventing node runs independently and does not affect any system performance parameters of other Couchbase nodes.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="4-8-testing-with-different-workloads"><a class="anchor" href="#4-8-testing-with-different-workloads"></a>4.8 Testing with Different Workloads</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Prior to its adoption, you can perform various workload, backlogs and throughput validations before running on the  production server.</p>
+<p>Before running the Eventing Service on your production server, you can perform various validations such as testing with different workloads and Function backlogs, to arrive at an optimized throughput.</p>
 </div>
 <div class="paragraph">
 <p>As a first scenario, let us consider a case for optimizing Function throughput. In a cluster, you can add more CPUs and allocate additional workers. With added workers, the Function execution time decreases and thereby the throughput optimization requirement gets fulfilled.</p>
 </div>
 <div class="paragraph">
-<p>Let us consider Function execution backlogs as the second scenario.</p>
-</div>
-<div class="paragraph">
-<p>In a cluster, if the rate of change of events increases rapidly, a steep increase in the Function backlog statistics is observed. Here, adding additional workers will have no effect on backlogs statistics. In this case, we need to add another Eventing node. With the new node and as a result of the Eventing Rebalance operation, after certain time, the Function backlog statistics drops to a controllable measure.</p>
+<p>Let us consider Function execution backlogs as the second scenario. In a cluster, if the rate of change of events rapidly increase, you notice a steep rise in the Function backlog statistics. In this case, adding additional workers will have no effect on backlog statistics. We need to add another Eventing node. With the new node and as a result of the Eventing Rebalance operation, after certain time, the Function backlog statistics drops to a controllable measure.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-9-feed-boundary-and-restartability"><a class="anchor" href="#4-9-feed-boundary-and-restartability"></a>4.9 Feed Boundary and Restartability</h2>
+<h2 id="feed-boundary-and-restartability"><a class="anchor" href="#feed-boundary-and-restartability"></a>Feed Boundary and Restartability</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Using the feed boundary option, you can design your handler code in an easy way to manage seasonal traffic events during promotional campaigns such as Cyber Monday and Black Friday.</p>
+<p>Using the feed boundary option, you can design your handler code in an easy way to manage seasonal traffic events. With the Eventing Service you can run promotional campaigns such as Cyber Monday and Black Friday.</p>
 </div>
 <div class="paragraph">
-<p>In your Test Environments, you can deploy a Function to start tracking events, undeploy to pause, then deploy again to restart event-tracking and thereby validate the Function execution restartability feature.</p>
+<p>In your Test Environments, you can deploy a Function to start tracking events, undeploy to pause, then deploy again to restart event-tracking and thereby validate the Functions execution restartability feature.</p>
 </div>
 <div class="paragraph">
-<p>After validating feed boundary and restartability features, you may be comfortable to port your Functions from a Test to a Production Environment.</p>
+<p>After validating feed boundary and restartability, with an increased confidence, you may be comfortable to port your Functions from a Test to a Production Environment.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="4-10-eventing-service-and-xdcr"><a class="anchor" href="#4-10-eventing-service-and-xdcr"></a>4.10 Eventing Service and XDCR</h2>
+<h2 id="eventing-service-and-cross-data-center-replication-xdcr"><a class="anchor" href="#eventing-service-and-cross-data-center-replication-xdcr"></a>Eventing Service and Cross Data Center Replication (XDCR)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Couchbase, using the XDCR option, provides a method for onboarding cluster nodes which are running on prior release versions. You can replicate(XDCR) data between your current cluster node (let us say, running on Couchbase Server Release 4.0 version) with a new Eventing Node running on Couchbase Server Release 5.5 version or higher. Once the XDCR operation is complete, you can deploy Functions on the new Eventing node and start tracking data mutations.</p>
@@ -236,6 +213,9 @@ In the Eventing node, during an XDCR operation, replication of defined Functions
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>As you can infer from this section, any individual consideration or any combination of considerations such as  data-sets, deploying business logic along-side data, scaling, feed boundary and restartability considerations, are compelling and helps while adopting the Eventing Service in your organisation.</p>
 </div>
 </div>
 </div>
@@ -1866,13 +1846,54 @@ In the Eventing node, during an XDCR operation, replication of defined Functions
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item is-current-page is-active" data-depth="2">
     <span class="nav-line">
@@ -1882,6 +1903,11 @@ In the Eventing node, during an XDCR operation, replication of defined Functions
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">

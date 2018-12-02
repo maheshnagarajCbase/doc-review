@@ -95,6 +95,7 @@
 <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="../introduction/intro.html">Couchbase Server</a></li>
+    <li class="crumb"><a href="eventing-overview.html">Handle Events</a></li>
     <li class="crumb"><a href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a></li>
   </ul>
 </nav>
@@ -108,27 +109,27 @@
 <h1 class="page">Functions Lifecycle Operations</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="quoteblock abstract">
-<blockquote>
-Couchbase Functions offers seven distinct lifecycle operations: add, deploy, undeploy, debug, delete and export-import.
-</blockquote>
+<div class="paragraph">
+<p>Couchbase Functions offers seven distinct lifecycle operations: add, deploy, undeploy, debug, delete and export-import.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/functions-lifecycle-operations.png" alt="functions lifecycle operations" width="570">
+</div>
 </div>
 <div class="paragraph">
-<p>+
-image::functions-lifecycle-operations.png[,570]</p>
-</div>
-<div class="paragraph">
-<p>The following table presents supported lifecycle operation with their Function status.</p>
+<p>The following table presents supported lifecycle operations with their Function status.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 16.6666%;">
-<col style="width: 41.6666%;">
-<col style="width: 41.6668%;">
+<col style="width: 23.0769%;">
+<col style="width: 38.4615%;">
+<col style="width: 38.4616%;">
 </colgroup>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Lifecycle/Function Status</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Lifecycle/<br>
+Function Status</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Deploy</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Undeploy</strong></p></td>
 </tr>
@@ -162,7 +163,7 @@ image::functions-lifecycle-operations.png[,570]</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="adding-a-function"><a class="anchor" href="#adding-a-function"></a>Adding a Function</h2>
+<h2 id="addfunctions"><a class="anchor" href="#addfunctions"></a>Adding a Function</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>To add a new Function, proceed as follows:</p>
@@ -170,17 +171,14 @@ image::functions-lifecycle-operations.png[,570]</p>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From the Couchbase <strong>Web Console</strong> &gt; <strong>Eventing</strong> page, click <strong>ADD FUNCTION</strong>.</p>
+<p>From the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION.</p>
 </li>
 <li>
-<p>In the <strong>ADD FUNCTION</strong> dialog, for individual Function elements provide the below information:</p>
-</li>
-</ol>
-</div>
+<p>In the ADD FUNCTION dialog, for individual Function elements, provide the below information:</p>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
-<col style="width: 16.6666%;">
-<col style="width: 83.3334%;">
+<col style="width: 25%;">
+<col style="width: 75%;">
 </colgroup>
 <thead>
 <tr>
@@ -191,13 +189,11 @@ image::functions-lifecycle-operations.png[,570]</p>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Source Bucket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This the bucket that listens to data mutations.</p>
-<p class="tableblock">For more information on source buckets, refer to {Link}.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This bucket listens to data mutations. For more information, see <a href="eventing-terminologies.html#source-buckets" class="page">Source Buckets</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Metadata Bucket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This bucket stores artifacts and checkpoint information.</p>
-<p class="tableblock">For more information on metadata buckets, refer to {Link}.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This bucket stores artifacts and checkpoint information. For more information, see <a href="eventing-terminologies.html#metadata-buckets" class="page">Metadata Buckets</a>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Function Name</p></td>
@@ -205,7 +201,7 @@ image::functions-lifecycle-operations.png[,570]</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Provide a small description for the Function. This is optional.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provide a small description for the Function you are creating. This field is optional.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Settings</p></td>
@@ -221,7 +217,7 @@ image::functions-lifecycle-operations.png[,570]</p>
 <p><strong>Workers</strong> : Specify the number of worker threads to be allocated. The default value is 3.</p>
 </li>
 <li>
-<p><strong>Script Timeout</strong> : Specify the number of seconds that should elapse before the Function script times out. The default is 60.</p>
+<p><strong>Script Timeout</strong> : Specify the number of seconds that should elapse before the Function script times out. The default value is 60.</p>
 </li>
 </ul>
 </div>
@@ -231,47 +227,41 @@ image::functions-lifecycle-operations.png[,570]</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Bindings</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A binding allows separating of environment specific variables from the handler code. For more information on Bindings, refer to {link}.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A binding allows separating of environment specific variables from the handler code. For more information, see <a href="eventing-terminologies.html#bindings" class="page">Bindings</a></p></td>
 </tr>
 </tbody>
 </table>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click <strong>Next: Add Code</strong>. The Function name dialog appears. The Function name dialog initially contains a placeholder code block. You will substitute your actual Function code in this block.</p>
 </li>
 <li>
-<p>The above step completes the procedure for adding a Function.</p>
+<p>Click Next: Add Code. The Function name dialog appears. The Function name dialog initially contains a placeholder code block. You will substitute your actual Function code in this block. The above step completes the procedure for adding a Function.</p>
 </li>
 <li>
-<p>To return to the Eventing screen, click <strong>Eventing</strong>.</p>
+<p>To return to the Eventing screen, click Eventing.</p>
 </li>
 <li>
-<p>Click on the Function name. Additional controls are now displayed: The controls are:</p>
-<div class="ulist">
-<ul>
+<p>Click on the Function name. Additional controls are now displayed:<br>
+The controls are:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p><strong>Delete</strong>: Deletes the Function from the system.</p>
+<p>Delete: Deletes the Function from the system.</p>
 </li>
 <li>
-<p><strong>Export</strong>: Exports the Function as a JSON document.</p>
+<p>Export: Exports the Function as a JSON document.</p>
 </li>
 <li>
-<p><strong>Deploy</strong>: Deploys the Function, making it active across the cluster.</p>
+<p>Deploy: Deploys the Function and makes it active across the cluster.</p>
 </li>
 <li>
-<p><strong>Edit JavaScript</strong>: Allows edits to be made on the Function, in an edit dialog.</p>
+<p>Edit JavaScript: Allows edits to be made on the Function handler code, in an edit dialog.</p>
 </li>
-</ul>
+</ol>
 </div>
 </li>
 </ol>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="deploying-a-function"><a class="anchor" href="#deploying-a-function"></a>Deploying a Function</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="deploying-a-function"><a class="anchor" href="#deploying-a-function"></a>Deploying a Function</h3>
 <div class="paragraph">
 <p>The deploy operation activates a Function. A Function must be in a deployed status to process data mutations. Couchbase Server performs a source validation step before Function deployment.</p>
 </div>
@@ -287,28 +277,25 @@ image::functions-lifecycle-operations.png[,570]</p>
 <p>Click on the Function name. Additional controls get displayed.</p>
 </li>
 <li>
-<p>Click Deploy. This displays the Confirm Deploy Function dialog.</p>
+<p>Click Deploy. This displays the Confirm Deploy Function dialog. The Feed Boundary determines whether documents previously in existence needs to be included in the Function’s activities. Everything and From now are two options. The Everything option invokes a Function on all the data present in the cluster. The From now option invokes a Function during future instances of data mutation, post Function deployment.</p>
 </li>
 <li>
-<p>The Feed Boundary determines whether documents previously in existence needs to be included in the Function’s activities. Everything and From now are two options. The Everything option invokes a Function on all the data present in the cluster. The From now option invokes a Function during future instances of data mutation, post Function deployment.</p>
-</li>
-<li>
-<p>Click Deploy Function. This deploys the Function and returns you to the main Eventing screen.</p>
-</li>
-<li>
-<p>The UI indicates that the Function is now deployed and running.</p>
+<p>Click Deploy Function. This deploys the Function and returns you to the main Eventing screen.
+The UI indicates that the Function is now deployed and running.</p>
 </li>
 </ol>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="undeploying-a-function"><a class="anchor" href="#undeploying-a-function"></a>Undeploying a Function</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="undeploying-a-function"><a class="anchor" href="#undeploying-a-function"></a>Undeploying a Function</h3>
 <div class="paragraph">
-<p>Couchbase Server terminates processing of data mutations when you undeploy a Function. Post undeployment, workers along with any other runtime resources acquired by the Function are either released or they get terminated.
-The undeployed state can be logically termed as a temporary state of a Function. An undeployed Function can be deployed to resume tracking of data mutations, modified to make edits to the Function handler code or can be deleted.
-To edit the handler code, you must undeploy a Function.</p>
+<p>Couchbase Server terminates processing of data mutations when you undeploy a Function. Post undeployment, workers along with any other runtime resources acquired by the Function are either released or they get terminated.</p>
+</div>
+<div class="paragraph">
+<p>The undeployed state can be logically termed as a temporary state of a Function. An undeployed Function can be deployed to resume tracking of data mutations, modified to make edits to the Function handler code, or can be deleted.</p>
+</div>
+<div class="paragraph">
+<p>To edit the handler code, you must undeploy a Function.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -317,7 +304,7 @@ To edit the handler code, you must undeploy a Function.</p>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Before you undelpoy a Function, ensure to make informed decisions regarding any  Function Backlogs. The Function Backlog information is available in the Statistics page {ink}.
+Before you undelpoy a Function, ensure to make informed decisions regarding Function Backlogs. The Function Backlog information is available in <a href="eventing-statistics.html" class="page">Statistics</a> section.
 </td>
 </tr>
 </table>
@@ -334,28 +321,21 @@ Before you undelpoy a Function, ensure to make informed decisions regarding any 
 <p>Click on the deployed Function name. Additional controls get displayed.</p>
 </li>
 <li>
-<p>Click Undeploy..</p>
-</li>
-<li>
-<p>Click Undeploy Function. This undeploys the Function and returns you to the main   Eventing screen.</p>
+<p>Click Undeploy. This undeploys the Function and returns you to the main   Eventing screen.</p>
 </li>
 </ol>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="debugging-a-function"><a class="anchor" href="#debugging-a-function"></a>Debugging a Function</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="debugging-a-function"><a class="anchor" href="#debugging-a-function"></a>Debugging a Function</h3>
 <div class="paragraph">
-<p>For information on debugging, refer to {link}</p>
+<p>For information on debugging, refer to <a href="eventing-diagnostics-debugging.html#debugger" class="page">Debugging</a> section.</p>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="exporting-and-importing-of-functions"><a class="anchor" href="#exporting-and-importing-of-functions"></a>Exporting and Importing of Functions</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="exporting-and-importing-of-functions"><a class="anchor" href="#exporting-and-importing-of-functions"></a>Exporting and Importing of Functions</h3>
 <div class="paragraph">
-<p>For easy porting of code across environments an export-import option is provided. You can export deployed and as well as an undeployed Function.</p>
+<p>For easy porting of code across environments an export-import option is provided.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -375,31 +355,39 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>From the Couchbase Web Console &gt; Eventing page.</p>
+<p>Navigate to the Couchbase Web Console &gt; Eventing page.</p>
 </li>
 <li>
 <p>To export a Function:</p>
-</li>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Click on the deployed Function name. Additional controls get displayed.</p>
 </li>
 <li>
 <p>Click Export. The Function definition is exported in a JSON format.</p>
 </li>
-<li>
-<p>To imported an exported Function:</p>
+</ol>
+</div>
 </li>
 <li>
-<p>From the Couchbase Web Console &gt; Eventing page.</p>
+<p>To import an exported Function:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Navigate to the Couchbase Web Console &gt; Eventing page.</p>
 </li>
 <li>
-<p>From the Eventing page, click IMPORT. The import button is available near the screen top right-corner.</p>
+<p>From the Eventing page, click IMPORT. The import button is available at the screen top right-corner.</p>
 </li>
 <li>
-<p>Browser and select an exported file. Click Open. The Add Function dialog gets displayed.</p>
+<p>Browse and select an exported file. Click Open. The Add Function dialog gets displayed.</p>
 </li>
 <li>
-<p>In the Add Function dialog, few fields are populated. Make relevant changes if needed.</p>
+<p>In the Add Function dialog, few fields are pre-populated. Make relevant changes if needed.</p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p>Click Next: Add Code.</p>
@@ -411,11 +399,12 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="deleting-a-function"><a class="anchor" href="#deleting-a-function"></a>Deleting a Function</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Server supports deleting of undeployed Functions. A delete operations removes the Function from the cluster. Deleting a Function is an irreversible operation. When a Functions gets deleted, all indexes are dropped, all metadata information in general and timer related metadata in particular, gets deleted from the cluster.</p>
+<p>Couchbase Server supports deleting of undeployed Functions. A delete operation removes the Function from the cluster. Deleting a Function is an irreversible operation. When a Function gets deleted, all indexes are dropped, all metadata information in general and timer related metadata in particular, gets deleted from the cluster.</p>
 </div>
 <div class="paragraph">
 <p>To delete a Function, proceed as follows:</p>
@@ -1477,7 +1466,7 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
   </li>
 </ul>
   </li>
-  <li class="nav-item is-active" data-depth="0">
+  <li class="nav-item is-current-path is-active" data-depth="0">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <span class="nav-text">Develop</span>
@@ -2057,7 +2046,7 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
   </li>
 </ul>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-path is-active" data-depth="1">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-overview.html">Handle Events</a>
@@ -2065,13 +2054,54 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
+    <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
-    <a class="nav-link" href="#eventing:eventing-functions-lifecycle-operations">Functions Lifecycle Operations</a>
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
     </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-language-constructs.html">Language Constructs</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cli.html">Functions CLI</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-statistics.html">Statistics</a>
+    </span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item is-current-page is-active" data-depth="2">
+    <span class="nav-line">
+    <button class="nav-toggle"></button>
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html">Functions Lifecycle Operations</a>
+    </span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
@@ -2081,6 +2111,11 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
   <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <a class="nav-link" href="eventing-diagnostics-debugging.html">Diagnostics and Debugging</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-cluster-operations.html">Cluster Operations</a>
     </span>
   </li>
   <li class="nav-item" data-depth="2">
