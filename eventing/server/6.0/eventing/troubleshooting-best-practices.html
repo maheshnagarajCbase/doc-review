@@ -114,7 +114,7 @@
 <p>Couchbase Server for a specific Function limits the maximum number of workers to 10.
 This upper limit is configured for system optimization purposes.
 In the Function definition, if the number of workers exceeds the set threshold, then the system automatically generates a warning message.
-However, the warning message does not prevent the Function deployment.</p>
+However, the warning message does not prevent deployment of the Function .</p>
 </div>
 <div class="paragraph">
 <p><strong>Warning Message</strong>: "There are &lt;number_of_workers&gt; eventing workers configured to run.
@@ -155,18 +155,7 @@ cURL commands are a Developer Preview feature intended for development purposes 
 <h2 id="when-should-developers-use-the-try-catch-block-in-function-handlers"><a class="anchor" href="#when-should-developers-use-the-try-catch-block-in-function-handlers"></a>When should developers use the try-catch block in Function handlers?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As a best practice, while programming the Function handler code, for basic error handling and debugging operations, it is recommended that application developers use the try-catch block.</p>
-</div>
-<div class="paragraph">
-<p>Before deployment, Couchbase Server verifies the Function handler code.
-Only valid Functions get deployed.
-Using the log option within a try-catch block, you can record errors.
-These error logs get stored in the application log file.
-By default, JavaScript runtime errors get stored in the system logs.
-Unlike system logs, troubleshooting and debugging operations are easy when you use the try-catch block and application log options.</p>
-</div>
-<div class="paragraph">
-<p>During runtime, Application logs, by default, do not capture any handler code exceptions. To log exceptions, it is recommended to encapsulate your code in a try-catch block.</p>
+<p>As a best practice to detect or debug logical errors in the Function handler code, it is recommended that developers use the try-catch block.</p>
 </div>
 <div class="paragraph">
 <p>A sample try-catch block is provided for reference:</p>
@@ -228,10 +217,6 @@ Couchbase Server can flag simple infinite recursions. However, in a long chain o
 <div class="paragraph">
 <p>As a workaround, it is recommended to increase the script timeout value.
 Ensure that you configure the script timeout value after carefully evaluating the execution latency of the Function.</p>
-</div>
-<div class="paragraph">
-<p>As a best practice use a combination of try-catch block and the application log options.
-This way you can monitor, debug and troubleshoot errors during the Function execution.</p>
 </div>
 </div>
 </div>
@@ -1907,6 +1892,31 @@ This way you can monitor, debug and troubleshoot errors during the Function exec
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#deploy-functions">Deploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#undeploy-functions">Undeploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#debug-functions">Debugging a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#export-import-functions">Exporting and Importing of Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#delete-function">Deleting a Function</a>
     </span>
   </li>
 </ul>

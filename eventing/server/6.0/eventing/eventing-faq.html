@@ -199,33 +199,6 @@ If versioning is important, include it as part of the data architecture.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Are Functions similar to a Database Trigger?</p>
-<div class="paragraph">
-<p>In a rough sense, Functions are similar to the Post-Triggers of the database world.
-But with Functions, the action is already completed at the data-layer, and the event handler gives an interface by which developers can key in the logic of what needs to happen ‘after’ the action is done.
-What a Function sees is the actual event of the change, and hence it does not directly correlate with Database Triggers.</p>
-</div>
-</li>
-<li>
-<p>Are Functions similar to a Rules Engine?</p>
-<div class="paragraph">
-<p>Not exactly.
-A Rules Engine enforces ordering and other semantics that is not possible out of the box with Functions.
-However, Functions can be used to implement one - even Rules Engine.
-The Function in its purest form offers a rule to implemented closer to the data, but cannot trigger another Function directly.</p>
-</div>
-</li>
-<li>
-<p>Are Functions similar to a Stored Procedure?</p>
-<div class="paragraph">
-<p>Stored Procedures enforce a request-response model.
-A stored procedure will not be invoked automatically; it has to be invoked by a calling method.
-Functions are based on the idea of events.
-Changes to the data are events.
-These events trigger Functions, and hence this is not a request-response model in its purest sense.</p>
-</div>
-</li>
-<li>
 <p>Do I need a separate middleware to consume the Functions? How do I consume changes in my middleware/application?</p>
 <div class="paragraph">
 <p>Database changes are consumed using the Function defined: there is no other programmatic way of accessing the changes (such as by using an SDK, or some other form of middleware). REST endpoints are exposed, to perform administrative operations</p>
@@ -243,13 +216,6 @@ We do not allow import of node modules or external JS libraries.</p>
 <div class="paragraph">
 <p>The Eventing Service listens to changes that appear in the DCP.
 DCP is valid for the Data Service, and Functions operate on documents that are either in key-value or in document (JSON) format.</p>
-</div>
-</li>
-<li>
-<p>What happens when a Function is debugged?</p>
-<div class="paragraph">
-<p>We block one of the mutations alone and hand it over to the debugger session.
-The rest of the mutations continue to be serviced by the event handler.</p>
 </div>
 </li>
 <li>
@@ -299,14 +265,6 @@ Though you can define Javascript functions inside a Function (outside the scope 
 <p>What is in the "meta" Function parameter (OnUpdate, OnDelete)? Is this the metadata we currently write in order to figure out what has changed in the document?</p>
 <div class="paragraph">
 <p>These are the meta fields associated with the document. For more information, refer to the Link section.</p>
-</div>
-</li>
-<li>
-<p>What is the metadata bucket? Do I need to create a separate bucket?</p>
-<div class="paragraph">
-<p>To provide better restartability semantics when an Eventing node is offline, some metadata needs to be stored: a Couchbase bucket solves this problem.
-Setting up the metadata bucket is a one-time activity that is done cluster-wide.
-It is recommended that the metadata bucket not be used for any other data-storage (which is to say, it should not be accessed by any other application).</p>
 </div>
 </li>
 <li>
@@ -2025,6 +1983,31 @@ When the Eventing node experiences a failover condition, few mutations may be pr
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="eventing-functions-lifecycle-operations.html#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#deploy-functions">Deploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#undeploy-functions">Undeploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#debug-functions">Debugging a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#export-import-functions">Exporting and Importing of Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="eventing-functions-lifecycle-operations.html#delete-function">Deleting a Function</a>
     </span>
   </li>
 </ul>

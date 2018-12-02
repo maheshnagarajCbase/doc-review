@@ -261,7 +261,7 @@ The controls are:</p>
 </ol>
 </div>
 <div class="sect2">
-<h3 id="deploying-a-function"><a class="anchor" href="#deploying-a-function"></a>Deploying a Function</h3>
+<h3 id="deploy-functions"><a class="anchor" href="#deploy-functions"></a>Deploying a Function</h3>
 <div class="paragraph">
 <p>The deploy operation activates a Function. A Function must be in a deployed status to process data mutations. Couchbase Server performs a source validation step before Function deployment.</p>
 </div>
@@ -287,7 +287,7 @@ The UI indicates that the Function is now deployed and running.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="undeploying-a-function"><a class="anchor" href="#undeploying-a-function"></a>Undeploying a Function</h3>
+<h3 id="undeploy-functions"><a class="anchor" href="#undeploy-functions"></a>Undeploying a Function</h3>
 <div class="paragraph">
 <p>Couchbase Server terminates processing of data mutations when you undeploy a Function. Post undeployment, workers along with any other runtime resources acquired by the Function are either released or they get terminated.</p>
 </div>
@@ -327,13 +327,13 @@ Before you undelpoy a Function, ensure to make informed decisions regarding Func
 </div>
 </div>
 <div class="sect2">
-<h3 id="debugging-a-function"><a class="anchor" href="#debugging-a-function"></a>Debugging a Function</h3>
+<h3 id="debug-functions"><a class="anchor" href="#debug-functions"></a>Debugging a Function</h3>
 <div class="paragraph">
 <p>For information on debugging, refer to <a href="eventing-diagnostics-debugging.html#debugger" class="page">Debugging</a> section.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="exporting-and-importing-of-functions"><a class="anchor" href="#exporting-and-importing-of-functions"></a>Exporting and Importing of Functions</h3>
+<h3 id="export-import-functions"><a class="anchor" href="#export-import-functions"></a>Exporting and Importing of Functions</h3>
 <div class="paragraph">
 <p>For easy porting of code across environments an export-import option is provided.</p>
 </div>
@@ -401,7 +401,7 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
 </div>
 </div>
 <div class="sect1">
-<h2 id="deleting-a-function"><a class="anchor" href="#deleting-a-function"></a>Deleting a Function</h2>
+<h2 id="delete-function"><a class="anchor" href="#delete-function"></a>Deleting a Function</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Couchbase Server supports deleting of undeployed Functions. A delete operation removes the Function from the cluster. Deleting a Function is an irreversible operation. When a Function gets deleted, all indexes are dropped, all metadata information in general and timer related metadata in particular, gets deleted from the cluster.</p>
@@ -2099,6 +2099,31 @@ Third-party defined Function definitions cannot be imported. Couchbase Server su
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="#addfunctions">Adding a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#deploy-functions">Deploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#undeploy-functions">Undeploying a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#debug-functions">Debugging a Function</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#export-import-functions">Exporting and Importing of Functions</a>
+    </span>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <span class="nav-line">
+    <a class="nav-link" href="#delete-function">Deleting a Function</a>
     </span>
   </li>
 </ul>
