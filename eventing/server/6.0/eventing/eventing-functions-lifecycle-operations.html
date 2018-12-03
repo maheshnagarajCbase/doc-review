@@ -114,7 +114,7 @@
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/functions-lifecycle-operations.png" alt="functions lifecycle operations" width="570">
+<img src="_images/eventing-fun-lifecycle.jpg" alt="eventing fun lifecycle" width="570">
 </div>
 </div>
 <div class="paragraph">
@@ -152,11 +152,6 @@ Function Status</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Delete</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not supported. Deployed Functions cannot be deleted.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Supported. Undeployed Functions can be deleted.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Export</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Supported</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Supported</p></td>
 </tr>
 </tbody>
 </table>
@@ -324,6 +319,21 @@ Before you undelpoy a Function, ensure to make informed decisions regarding Func
 <p>Click Undeploy. This undeploys the Function and returns you to the main   Eventing screen.</p>
 </li>
 </ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Function lifecycle operations and the Eventing rebalance operation<br>
+are mutually exclusive. The Eventing rebalance operation fails when a Function<br>
+lifecycle operation is currently in progress. Likewise, when the Eventing<br>
+rebalance operation is in progress, you cannot perform a Function lifecycle operation.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">

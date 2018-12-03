@@ -106,12 +106,6 @@
   </div>
 <article class="doc">
 <h1 class="page">Comparing Event Based Architecture over Polling and Message Queue Based Systems</h1>
-<div class="sect1">
-<h2 id="message-queue-and-enterprise-bus"><a class="anchor" href="#message-queue-and-enterprise-bus"></a>Message Queue and Enterprise Bus</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>In the Message Queue and Enterprise Bus implementations, application servers perform a write operation on to the data platform. Additionally, in order to track data mutations, these applications write to a third-party Message Queue or to an Enterprise Server Bus.</p>
-</div>
 <div class="sect2">
 <h3 id="comparing-eventing-service-with-message-queue"><a class="anchor" href="#comparing-eventing-service-with-message-queue"></a>Comparing Eventing Service with Message Queue</h3>
 <div class="paragraph">
@@ -119,8 +113,6 @@
 </div>
 <div class="paragraph">
 <p>Eventing Service is native to Couchbase Server and does not need a new layer to record or propagate data changes. With no-dual writes, the write-failure condition is eliminated. Centralized data governance, layer consolidation, option to debug and reduced TCO aspects play an active role in increasing the overall user experience with the Couchbase Data Platform.</p>
-</div>
-</div>
 </div>
 </div>
 <div class="sect1">
@@ -135,7 +127,7 @@
 <p>When large volumes of frequently changing data are encountered, the batch system in polling becomes ineffective. Factors such as CPU utilization, non-reactive tracking of data mutations, code duplication issues, contribute in increasing the system complexity. With these increased complexities, you cannot scale using the polling implementation.</p>
 </div>
 <div class="paragraph">
-<p>The Eventing Service, on the other hand, can manage data changes within the cluster and also propagate these data changes to another database or to an end-point. Implemented as a state-less compute operation, the Eventing Service, utilizes latest trends in compute (multi-core CPU) and can scale easily.</p>
+<p>The Eventing Service, on the other hand, can manage data changes within the cluster and also propagate these data changes to an end-point. Implemented as a state-less compute operation, the Eventing Service, utilizes latest trends in compute (multi-core CPU) and can scale easily.</p>
 </div>
 </div>
 </div>
