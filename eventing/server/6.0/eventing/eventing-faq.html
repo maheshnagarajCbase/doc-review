@@ -122,16 +122,9 @@ This section provides answers to commonly asked questions pertaining to the Eve
 <div class="ulist">
 <ul>
 <li>
-<p>Is Eventing an MDS-enabled service?</p>
-<div class="paragraph">
-<p>Yes. MDS enables workload isolation in a Couchbase cluster.
-Eventing nodes can be added as more Functions are added, or if the mutation rates are high.</p>
-</div>
-</li>
-<li>
 <p>What kind of nodes do I run my Eventing Service on?</p>
 <div class="paragraph">
-<p>Eventing leverages the latest trends in multi-core CPUs; therefore nodes that you select for the Eventing Service should optimally have a higher number of cores than those for indexing.</p>
+<p>Eventing leverages the latest trends in multi-core CPUs. The nodes for the Eventing Service should optimally have a higher number of cores than those for indexing.</p>
 </div>
 </li>
 <li>
@@ -180,7 +173,7 @@ If versioning is important, include it as part of the data architecture.</p>
 <li>
 <p>Can I get old and new values of the document inside the Function?</p>
 <div class="paragraph">
-<p>No. We do not support versioning of documents; therefore, this feature is not available out of the box. However, you can have a parent bucket and its replica version. The replica bucket would retain the version of documents before the current set of changes.</p>
+<p>No. We do not support versioning of documents, therefore this feature is not available out of the box. However, you can have a parent bucket and its replica version. The replica bucket would retain the version of documents before the current set of changes.</p>
 </div>
 </li>
 <li>
@@ -201,7 +194,7 @@ If versioning is important, include it as part of the data architecture.</p>
 <li>
 <p>Do I need a separate middleware to consume the Functions? How do I consume changes in my middleware/application?</p>
 <div class="paragraph">
-<p>Database changes are consumed using the Function defined: there is no other programmatic way of accessing the changes (such as by using an SDK, or some other form of middleware). REST endpoints are exposed, to perform administrative operations</p>
+<p>Database changes are consumed using the defined Function. There is no other programmatic way of accessing the changes (such as by using an SDK, or some other form of middleware). REST endpoints are exposed, to perform administrative operations</p>
 </div>
 </li>
 <li>
@@ -246,13 +239,6 @@ Couchbase’s Kafka connector is an SDK component that needs an application cont
 <div class="sectionbody">
 <div class="ulist">
 <ul>
-<li>
-<p>What languages are supported?</p>
-<div class="paragraph">
-<p>Javascript is the language to be used while creating Functions.
-Node modules cannot be imported: only simple Javascript can be used.</p>
-</div>
-</li>
 <li>
 <p>Why can’t I create global variables?</p>
 <div class="paragraph">

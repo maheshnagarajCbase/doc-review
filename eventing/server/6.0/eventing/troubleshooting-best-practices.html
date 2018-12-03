@@ -111,7 +111,7 @@
 <h2 id="what-happens-when-more-workers-are-allocated-for-a-function"><a class="anchor" href="#what-happens-when-more-workers-are-allocated-for-a-function"></a>What happens when more Workers are allocated for a Function?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Server for a specific Function limits the maximum number of workers to 10.
+<p>Couchbase Server for a Function limits the maximum number of workers to 10.
 This upper limit is configured for system optimization purposes.
 In the Function definition, if the number of workers exceeds the set threshold, then the system automatically generates a warning message.
 However, the warning message does not prevent deployment of the Function .</p>
@@ -123,7 +123,7 @@ System performance may be impacted."</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="can-this-release-of-couchbase-server-process-curl-commands"><a class="anchor" href="#can-this-release-of-couchbase-server-process-curl-commands"></a>Can this release of Couchbase Server process cURL commands?</h2>
+<h2 id="can-couchbase-server-process-curl-commands"><a class="anchor" href="#can-couchbase-server-process-curl-commands"></a>Can Couchbase Server process cURL commands?</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Support for cURL commands in Functions is for demo purposes.
@@ -155,7 +155,7 @@ cURL commands are a Developer Preview feature intended for development purposes 
 <h2 id="when-should-developers-use-the-try-catch-block-in-function-handlers"><a class="anchor" href="#when-should-developers-use-the-try-catch-block-in-function-handlers"></a>When should developers use the try-catch block in Function handlers?</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>As a best practice to detect or debug logical errors in the Function handler code, it is recommended that developers use the try-catch block.</p>
+<p>As a best practice to debug logical errors in the Function handler code, it is recommended that developers use the try-catch block.</p>
 </div>
 <div class="paragraph">
 <p>A sample try-catch block is provided for reference:</p>
