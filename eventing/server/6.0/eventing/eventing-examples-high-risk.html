@@ -285,12 +285,12 @@ From this point, the defined Function is executed on all existing documents and 
 <img src="_images/buckets.png" alt="buckets" width="600">
 </div>
 </div>
-<div class="literalblock">
-<div class="content">
-<pre>  This indicates that transactions which were flagged as high risk gets moved to the flagged_transactionsbucket.
-. From the Couchbase Web Console &gt; Query page, execute the below N1QL query. The query result displays currency mismatch and high risk transaction amount that was flagged.</pre>
+<div class="paragraph">
+<p>This indicates that transactions which were flagged as high risk gets moved to the flagged_transactionsbucket.</p>
 </div>
-</div>
+</li>
+<li>
+<p>From the Couchbase Web Console &gt; Query page, execute the below N1QL query. The query result displays currency mismatch and high risk transaction amount that was flagged.</p>
 <div class="listingblock">
 <div class="content">
 <pre>SELECT reason_code, COUNT(1), num_txns, SUM(amount) amount
