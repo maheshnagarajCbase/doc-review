@@ -12,8 +12,8 @@ gtag('config', 'UA-130449775-1');
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supported Operations in a Function Handler Code | Couchbase Docs (Local)</title>
-    <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-supportedops.html">
+    <title>Try Bucket Operation | Couchbase Docs (Local)</title>
+    <link rel="canonical" href="https:maheshnagarajCbase.github.io/server/6.0/eventing/eventing-bucketops-example.html">
     <link rel="schema.dcterms" href="https://purl.org/dc/terms/">
     <meta name="dcterms.subject" content="server">
     <meta name="dcterms.identifier" content="6.0">
@@ -104,77 +104,116 @@ gtag('config', 'UA-130449775-1');
 <nav class="crumbs" aria-label="breadcrumbs">
   <ul>
     <li class="crumb"><a href="../introduction/intro.html">Couchbase Server</a></li>
-    <li class="crumb"><a href="eventing-overview.html">Handle Events</a></li>
-    <li class="crumb"><a href="eventing-functions.html">Couchbase Functions</a></li>
-    <li class="crumb"><a href="eventing-supportedops.html">Supported Operations</a></li>
+    <li class="crumb"><a href="eventing-bucketops-example.html">Try Bucket Operation</a></li>
   </ul>
 </nav>
 <div class="tools" role="navigation">
   <ul>
-    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/eventing/pages/eventing-supportedops.adoc" title="Edit this Page">Edit</a></li>
+    <li class="tool edit"><a href="file:///Users/mahesh.nagaraj/EventingReVamp_AliceGA/docs-server/modules/eventing/pages/eventing-bucketops-example.adoc" title="Edit this Page">Edit</a></li>
   </ul>
 </div>
   </div>
 <article class="doc">
-<h1 class="page">Supported Operations in a Function Handler Code</h1>
-<div id="preamble">
-<div class="sectionbody">
+<h1 class="page">Try Bucket Operation</h1>
 <div class="paragraph">
-<p>Following operations are supported inside a Function handler code:</p>
+<p>To help you get started with Couchbase Functions, this section provides an example use case to perform a simple bucket operation.</p>
 </div>
-<div class="ulist">
-<ul>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
-<p><a href="#bucket-operations">Bucket Operations</a></p>
+<p>Create three buckets, source destination and metadata buckets.<br>
+For a detailed steps for creating source and  destination buckets, refer to link. For steps to create a metadata bucket, refer to link.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/add-buckets-bucketops.png" alt="add buckets bucketops" width="350">
+</div>
+</div>
 </li>
 <li>
-<p><a href="#n1qi-queries">N1QL Queries</a></p>
+<p>To add a new Function, from the Couchbase Web Console &gt; Eventing page, click ADD FUNCTION.</p>
 </li>
 <li>
-<p><a href="#timers">Timers</a></p>
+<p>In the ADD FUNCTION dialog, for individual Function elements provide the below information:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>For the Source Bucket drop-down, select the source option. The source bucket  was created in step 1 for this purpose.</p>
 </li>
 <li>
-<p><a href="eventing-diagnostics-debugging.html#debugger" class="page">Debugging</a></p>
+<p>For the Metadata Bucket drop-down, select metadata bucket option. The metadata bucket  was created in step 1 for this purpose.</p>
 </li>
-</ul>
+<li>
+<p>Enter BucketOps as the name of the Function in the Function Name text-box.</p>
+</li>
+<li>
+<p>Enter Sample Bucket-Ops in the function Description text-box.</p>
+</li>
+<li>
+<p>For the Settings option, use the default values.</p>
+</li>
+<li>
+<p>For the Bindings option, specify destination as the name of the bucket, and specify dst_bucket as its associated value.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/addfunctions-bucketops.png" alt="addfunctions bucketops" width="350">
 </div>
 </div>
+</li>
+</ol>
 </div>
-<div class="sect1">
-<h2 id="bucket-operations"><a class="anchor" href="#bucket-operations"></a>Bucket Operations</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Using the bucket accessors construct, you can read documents from a specific bucket and also perform write operations to other buckets.</p>
-</div>
-<div class="sect2">
-<h3 id="bucket-accessors"><a class="anchor" href="#bucket-accessors"></a>Language Construct for Bucket Accessors</h3>
-<div class="paragraph">
-<p>Bucket accessors provide access to an object&#8217;s properties by using the dot notation. Bucket accessors is one among the three added language constructs.</p>
-</div>
-<div class="paragraph">
-<p>Couchbase Buckets that are associated with a Function appears as a global JavaScript map. All map operations such as get, set, and delete are mapped to their respective get, set and delete operations in the Data Service provider.</p>
-</div>
+</li>
+<li>
+<p>In the ADD FUNCTION dialog, click Next: Add Code. The Bucket-Ops dialog appears. The Bucket-Ops dialog initially contains a placeholder code block. You will substitute your actual Bucket-Ops code in this block.</p>
+</li>
+<li>
+<p>Copy and paste the below handler code.</p>
 <div class="listingblock">
 <div class="content">
 <pre>function OnUpdate(doc, meta) {
-  // Assuming 'dest' is a bucket alias binding
-  var val = dest[meta.id];         // this is a bucket GET operation.
-  dest[meta.id] = {"status":3};    // this is a bucket SET operation.
-  delete dest[meta.id];            // this is a bucket DEL operation.
+    var doc_id = meta.id;
+    log('creating document for : ', doc);
+    dst_bucket[doc_id] = {'doc_id' : doc_id}; // SET operation
+}
+function OnDelete(meta) {
+    log('deleting document', meta.id);
+    delete dst_bucket[meta.id]; // DELETE operation
 }</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For a sample Bucket Operation, see <a href="eventing-bucketops-example.html" class="page">Try Bucket Operation</a></p>
+<p>The above Function handler code, upon data-mutation, reads the document from the source and transfers it to the destination bucket. The handler code stores this document transfer in the Eventing-Function log file.</p>
+</div>
+</li>
+<li>
+<p>After pasting, the screen appears as displayed below:</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bucketops-handlercode.png" alt="bucketops handlercode" width="400">
 </div>
 </div>
+</li>
+<li>
+<p>Click Save.</p>
+</li>
+<li>
+<p>To return to the Eventing screen, click Eventing.</p>
+</li>
+<li>
+<p>The Function Bucket-Ops gets listed as a defined Function.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/bucketops-deploy.png" alt="bucketops deploy" width="400">
 </div>
 </div>
-<div class="sect1">
-<h2 id="n1qi-queries"><a class="anchor" href="#n1qi-queries"></a>N1QL Queries</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Top level N1QL keywords, such as SELECT, UPDATE, and INSERT, are available as keywords in Functions.</p>
+</li>
+<li>
+<p>Click Deploy.</p>
+</li>
+<li>
+<p>From the Confirm Deploy Function dialog, in the Feed boundary drop-down, select Everything and click Deploy Function.<br>
+From this point, the defined Function is executed on all existing documents and on subsequent mutations.</p>
+</li>
+</ol>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -183,377 +222,17 @@ gtag('config', 'UA-130449775-1');
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Support for N1QL queries is still in development and may have some rough edges and bugs, and may change significantly before the final GA release. This version is intended for development purposes only, do not use them in production; no Enterprise Support is provided for Developer Preview features.
+The destination bucket is empty before Function execution.
 </td>
 </tr>
 </table>
 </div>
-<div class="sect2">
-<h3 id="n1ql"><a class="anchor" href="#n1ql"></a>Language Construct for N1QL Queries</h3>
 <div class="paragraph">
-<p>N1QL query is the second among the three added language constructs.</p>
-</div>
-<div class="paragraph">
-<p>Operations that return values are accessible through a special iterator on which the for <code>(var &lt;row&gt; of &lt;iterator&gt;)</code> looping-construct has been defined. This restricted looping-construct allows support of query-result streaming, and automatic query-cancellation when the iterator goes out of scope.</p>
-</div>
-<div class="paragraph">
-<p>Any variable that is reachable from the scope of the N1QL query can be referred to using <code>$&lt;variable&gt;</code> syntax in the N1QL statement, where parameters get substituted according to the rules of the named-parameter substitution in the N1QL grammar specification.</p>
-</div>
-<div class="paragraph">
-<p>The iterator is an input iterator (elements are read-only). Keywords cannot be used in the body of the iterator. The variables created inside the iterator are local to the iterator.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>function OnUpdate(doc, meta) {
-  var strong = 70;
-  var stmt =
-    SELECT *                  // N1QL queries are embedded directly.
-    FROM `beer-samples`       // Token escaping is standard N1QL style.
-    WHERE abv &gt; $strong;      // Local variable reference using $ syntax.
-  for (var beer of stmt) {  // Stream results using 'for' iterator.
-    break;                   // Cancel streaming query by breaking out.
-  }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>During deployment, if a handler code includes an N1QL query, then the system generates a warning message.</p>
-</div>
-<div class="paragraph">
-<p><code><strong>Warning Message</strong>: "Handler &lt;function_name&gt; uses Beta features. Do not use in production environments."</code></p>
-</div>
-<div class="paragraph">
-<p>However, the warning message does not prevent the Function deployment.</p>
-</div>
-<div class="paragraph">
-<p>You must use <code>$&lt;variable&gt;</code>, as per N1QL specification, to use a JavaScript variable in the query statement. The object expressions for substitution are not supported and therefore you cannot use the meta.id expression in the query statement.</p>
-</div>
-<div class="paragraph">
-<p>Instead of <code>meta.id expression</code>, you can use var id = meta.id in an N1QL query.</p>
-</div>
-<div class="paragraph">
-<p><strong>Invalid N1QL query</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>DELETE FROM `transactions` WHERE username = $meta.id;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p><strong>Valid N1QL query</strong></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>var id = meta.id;
-DELETE FROM `transactions` WHERE username = $id;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When you use a N1QL query inside a Function handler code, remember to use an escaped identifier for bucket names with special characters (<code>[.var]`bucket-name`</code>). Escaped identifiers are surrounded by backticks and support all identifiers in JSON.</p>
-</div>
-<div class="paragraph">
-<p>For example:</p>
-</div>
-<div class="paragraph">
-<p>If the bucket name is <code>beer-sample</code>, then use the N1QL query such as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM `beer-sample` WHERE type…</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If bucket name is <code>beersample</code>, then use the N1QL query such as:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>SELECT * FROM beersample WHERE type ...</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The example section provides an example for using N1QL queries, refer to <a href="eventing-example-data-enrichment.html" class="page">Cascade Delete</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="reserved-keywords"><a class="anchor" href="#reserved-keywords"></a>Reserved Keywords</h3>
-<div class="paragraph">
-<p>Reserved words are words that cannot be used as a variable name, function name, or as a property in the Function handler code.
-The following table lists the reserved words that you must refrain from using as they are used by Couchbase&#8217;s query language, N1QL.</p>
-</div>
-<table class="tableblock frame-all grid-all spread">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-<col style="width: 25%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top" colspan="4">N1QL Keywords</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ALTER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EXECUTE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MERGE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UPDATE</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">BUILD</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">EXPLAIN</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">PREPARE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">UPSERT</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CREATE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GRANT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">RENAME</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DELETE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INFER</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">REVOKE</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DROP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">INSERT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SELECT</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p><strong>What Happens If You Use a Reserved Word?</strong></p>
-</div>
-<div class="paragraph">
-<p>Let&#8217;s say you try to create a new Function handler code using a reserved word for variable names, for function names, and as a property bindings value.
-All three cases generate a deployment error.</p>
-</div>
-<div class="paragraph">
-<p>Reserved words as a variable name:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function get_numip_first_3_octets(ip)
-{
-  var grant = 0;
-  if (ip)
-  {
-	var parts = ip.split('.');
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Reserved words as a function name:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">function grant(ip)
-{
-  var return_val = 0;
-  if (ip)
-  {
-    var parts = ip.split('.');
-  }
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>During the Function deployment step, when the system validates the handler code, it displays an error message</p>
-</div>
-<div class="paragraph">
-<p><code>Sample Error Message - Deployment failed: Syntax error (&lt;line and column numbers&gt;) - grant is a reserved name in N1QLJs</code></p>
-</div>
-<div class="paragraph">
-<p>An sample Reserved words as a property bindings value is displayed below:</p>
+<p>Couchbase Server waits for a mutation to triggered the <strong>Bucket-Ops</strong> Function. Upon a mutation, the Function gets executed. As a result of Function execution, you should observe that documents are created in the destination bucket.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/reserved-words.png" alt="reserved words" width="300">
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="timers"><a class="anchor" href="#timers"></a>Timers</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Timers are asynchronous compute which offers Function execution in reference to wall-clock events. Timers also measure and track the amount of elapsed time and can be used while archiving of expired documents at a preconfigured time.</p>
-</div>
-<div class="paragraph">
-<p>Few important aspects related to timers are listed below:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Timers follow the same timeout semantics as their Parent Functions. So, if a Function has an execution timeout of 60 seconds, each of the timers created from the Function inherits the same execution timeout value of 60 seconds.</p>
-</li>
-<li>
-<p>Timers may run on a different node than the one on which it was created.</p>
-</li>
-<li>
-<p>One execution of timers is guaranteed despite node failures and cluster rebalances.</p>
-</li>
-<li>
-<p>During Function backlogs, timers get eventually executed.</p>
-</li>
-<li>
-<p>The metadata bucket stores information about timers and its association with a Function.</p>
-</li>
-<li>
-<p>Ensure that the metadata bucket is not deleted or flushed, or the keys in metadata bucket get updated.</p>
-</li>
-<li>
-<p>With an increase in the usage of timers, the metadata memory assignment must also be increased. Due to runtime or programmatic errors in the function handler code, if triggering of a timer fails, then timer execution may get permanently blocked.</p>
-</li>
-<li>
-<p>Bindings can be reused in timers. Bindings, created during the Function definition, can be accessed by the timer constructs in the Function handler code.</p>
-</li>
-<li>
-<p>Timers get deleted when the associated Function is deleted or undeployed.</p>
-</li>
-</ul>
-</div>
-<div class="sect2">
-<h3 id="timers-lan-con"><a class="anchor" href="#timers-lan-con"></a>Language Constructs for Timers</h3>
-<div class="paragraph">
-<p>Timers is the third added language constructs.</p>
-</div>
-<div class="paragraph">
-<p>To create a timer use the below syntax:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>   createTimer(callback, timestamp, reference, context)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the createTimer syntax:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>callback - is the function called when the timer gets triggered. You need to ensure that the callback function is the top-level function that takes a single argument, the context.</p>
-</li>
-<li>
-<p>timestamp - is the JavaScript Date object timestamp at which the Function handler code must be executed.</p>
-</li>
-<li>
-<p>reference - is a unique string that gets passed. This string helps to identify the timer that is being created. All callback and references are scoped to the Function definition. Also, all references must be unique within the Function scope. When multiple timers are created with the same unique reference, old timers (with the same unique reference) get canceled.</p>
-</li>
-<li>
-<p>context - is any JavaScript object that can be serialized. When the timer gets triggered, the context specified during timer creation gets passed to the callback Function. For optimal performance, the context object payload needs to be lesser than 100 KB.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Sample Timer Construct</strong></p>
-</div>
-<div class="paragraph">
-<p>A sample createTimer language construct is provided for reference.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>   createTimer(DocTimerCallback, twoMinsPrior, meta.id, context)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the sample construct:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>DocTimerCallback is the name of the function used in the Function handler code.</p>
-</li>
-<li>
-<p>twoMinsPrior is a JavaScript Date object.</p>
-</li>
-<li>
-<p>meta.id is a generic reference string that can be used in the Couchbase cluster.</p>
-</li>
-<li>
-<p>context is the JavaScript object that is used in the Function handler code.</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="sharding-of-timers"><a class="anchor" href="#sharding-of-timers"></a>Sharding of Timers</h4>
-<div class="paragraph">
-<p>Timers get automatically sharded across Eventing nodes and therefore are elastically scalable. Triggering of timers at or after a specified time interval is guaranteed. However, triggering of timers may either be on the same node (where the timer was created), or on a different node. Relative ordering between two specific timers cannot be maintained.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="debugging-and-logs"><a class="anchor" href="#debugging-and-logs"></a>Debugging and Logs</h4>
-<div class="paragraph">
-<p>Timers cannot be debugged using the Visual Debugger tool. For debugging, Couchbase recommends enclosing of timers in a try-catch block. When logging is enabled, timer related logs get captured as part of the Application logs.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="elapsed-timestamps"><a class="anchor" href="#elapsed-timestamps"></a>Elapsed Timestamps</h4>
-<div class="paragraph">
-<p>During runtime, when a Function handler code contains a timestamp in the past (elapsed timestamp), the system executes the code in the next available time window, as soon as all the required resources are available.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="handling-delays"><a class="anchor" href="#handling-delays"></a>Handling Delays</h4>
-<div class="paragraph">
-<p>During Function backlogs, execution of timers may be delayed. To handle these delays, you need to program additional time window in your code. If your business logic is time-sensitive after this additional time window the code should refrain from its Function execution.</p>
-</div>
-<div class="paragraph">
-<p>The following is a sample code snippet which performs a timestamp check (my_deadline) before code execution.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>func callback(context)
-{
-  //context.my_deadline is the parameter in the timer payload
-    if new Date().getTime() &gt; context.my_deadline
-      {
-        // timestamp is back-dated, do not execute the rest of the timer
-        return;
-       }
-}</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The Eventing Example section provides an example for Timers, <a href="eventing-examples-docexpiry.html" class="page">Document Expiry and Archival</a></p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="restapis"><a class="anchor" href="#restapis"></a>REST APIs and cURL Operations</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>curl is  a generic, language agnostic way to facilitate HTTP requests and responses.</p>
-</div>
-<div class="paragraph">
-<p>Inside Function handler code, using REST APIs, you can execute a cURL function to make requests to HTTP endpoints. Endpoints are resources on a web server at a specific path.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-REST APIs are supported in a non-production environments.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>If you prefer to work with APIs to invoke a REST endpoints, then use the below link to help you get started.</p>
-</div>
-<div class="paragraph">
-<p>Link: <a href="https://docs.couchbase.com/server/6.0/cli/cbcli/couchbase-cli-eventing-function-setup.html" class="bare">https://docs.couchbase.com/server/6.0/cli/cbcli/couchbase-cli-eventing-function-setup.html</a></p>
-</div>
+<img src="_images/destinationbucket-bucketops.png" alt="destinationbucket bucketops" width="450">
 </div>
 </div>
 </article>
@@ -1595,7 +1274,7 @@ REST APIs are supported in a non-production environments.
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-path is-active" data-depth="0">
+  <li class="nav-item is-active" data-depth="0">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <span class="nav-text">Develop</span>
@@ -2175,7 +1854,7 @@ REST APIs are supported in a non-production environments.
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-path is-active" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-overview.html">Handle Events</a>
@@ -2186,7 +1865,7 @@ REST APIs are supported in a non-production environments.
     <a class="nav-link" href="eventing-overview.html">Eventing Service Overview</a>
     </span>
   </li>
-  <li class="nav-item is-current-path is-active" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <span class="nav-line">
     <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-functions.html">Couchbase Functions</a>
@@ -2202,7 +1881,7 @@ REST APIs are supported in a non-production environments.
     <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
     </span>
   </li>
-  <li class="nav-item is-current-page is-active" data-depth="3">
+  <li class="nav-item" data-depth="3">
     <span class="nav-line">
     <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
     </span>
