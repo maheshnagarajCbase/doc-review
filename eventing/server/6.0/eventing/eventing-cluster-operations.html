@@ -1,11 +1,3 @@
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-130449775-1"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'UA-130449775-1');
-</script>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -118,10 +110,7 @@ gtag('config', 'UA-130449775-1');
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>This section provides information about a small subset of Eventing related cluster operations.</p>
-</div>
-<div class="paragraph">
-<p>Apart from these, for information on any other cluster operations, refer to <a href="https://docs.couchbase.com/server/5.5/clustersetup/server-setup.html" class="bare">https://docs.couchbase.com/server/5.5/clustersetup/server-setup.html</a></p>
+<p>This section provides information on Eventing related cluster operations. For a complete information on cluster operations, refer to <a href="https://docs.couchbase.com/server/5.5/clustersetup/server-setup.html">Cluster Operations</a></p>
 </div>
 </div>
 </div>
@@ -138,7 +127,7 @@ gtag('config', 'UA-130449775-1');
 <p>During Eventing rebalance the metadata bucket plays a very crucial role. The metadata bucket stores checkpoint information about processed mutations before rebalancing. Post rebalance completion, using this checkpoint information, the Eventing service resumes to process mutations and ensures that no data mutations are lost during rebalancing.</p>
 </div>
 <div class="paragraph">
-<p>Adding an Eventing node and rebalance is similar to cluster node addition and rebalancing, see <a href="https://docs.couchbase.com/server/6.0/manage/manage-nodes/add-node-and-rebalance.html" class="bare">https://docs.couchbase.com/server/6.0/manage/manage-nodes/add-node-and-rebalance.html</a></p>
+<p>Adding an Eventing node and rebalance is similar to cluster node addition and rebalancing, see <a href="https://docs.couchbase.com/server/6.0/manage/manage-nodes/add-node-and-rebalance.html">Add a Node and Rebalance</a></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -177,7 +166,7 @@ The Eventing failover results in loss of data mutations. It is recommended to ex
 </table>
 </div>
 <div class="paragraph">
-<p>Steps to failover an Eventing node is similar to steps in the cluster node failover section, see <a href="https://docs.couchbase.com/server/5.5/clustersetup/failover.html" class="bare">https://docs.couchbase.com/server/5.5/clustersetup/failover.html</a></p>
+<p>Steps to failover an Eventing node is similar to steps in the cluster node failover section, see <a href="https://docs.couchbase.com/server/5.5/clustersetup/failover.html">Failing over a Node</a></p>
 </div>
 </div>
 </div>
@@ -1824,13 +1813,16 @@ The Eventing failover results in loss of data mutations. It is recommended to ex
   </li>
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
+    <button class="nav-toggle"></button>
     <a class="nav-link" href="eventing-function-handler-code.html">Function Handler Code</a>
     </span>
-  </li>
-  <li class="nav-item" data-depth="3">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
     <span class="nav-line">
     <a class="nav-link" href="eventing-supportedops.html">Supported Operations</a>
     </span>
+  </li>
+</ul>
   </li>
   <li class="nav-item" data-depth="3">
     <span class="nav-line">
